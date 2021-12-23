@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Supermarketlist"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "robson.william65@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "github.com"
+basePath: "/"
+tags:
+  - name: "categories"
+    description: "Categories"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /v1/categories:
+    get:
+      tags:
+        - 'categories'
+      summary: "Get a list of categories by name"
+      description: ""
+      operationId: "categories#findCategories"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "name"
+          description: "Category name"
+          required: false
+          type: "string"
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductCategoryResponse"
+        "404":
+          description: "Not found"
+definitions:
+  ProductCategoryResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      errors:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            field:
+              type: "string"
+            message:
+              type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

@@ -1,0 +1,69 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: supermarket-list
+    admin:
+      jmx-name: supermarket-list
+  profiles:
+    active: dev, in-memory
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: info
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 2
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - database
+  jpa:
+    database: postgresql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - in-memory
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: test
+    password: test
+  h2:
+    console:
+      enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - production
+  jpa:
+    show-sql: false
+logging:
+  level:
+    root: error
