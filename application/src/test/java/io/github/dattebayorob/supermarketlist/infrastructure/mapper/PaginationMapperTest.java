@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PaginationMapperTest {
     PaginationMapper paginationMapper = new PaginationMapper();
     @Test
-    public void shouldMapSpringPageToPagination() {
+    void shouldMapSpringPageToPagination() {
         var content = Arrays.asList("A", "B", "C");
         var pageable = PageRequest.of(1, 3);
         long total = 10;
@@ -24,7 +24,7 @@ class PaginationMapperTest {
     }
 
     @Test
-    public void shouldMapPaginationToSpringPage() {
+    void shouldMapPaginationToSpringPage() {
         var content = Arrays.asList("A", "B", "C");
         int pageNumber = 1;
         int size = 3;

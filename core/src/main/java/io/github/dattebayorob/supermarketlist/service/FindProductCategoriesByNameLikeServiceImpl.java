@@ -1,6 +1,5 @@
 package io.github.dattebayorob.supermarketlist.service;
 
-import io.github.dattebayorob.supermarketlist.common.StringUtil;
 import io.github.dattebayorob.supermarketlist.domain.ProductCategory;
 import io.github.dattebayorob.supermarketlist.port.in.ProductCategoryRepository;
 import io.github.dattebayorob.supermarketlist.port.out.FindProductCategoriesByNameLikeService;

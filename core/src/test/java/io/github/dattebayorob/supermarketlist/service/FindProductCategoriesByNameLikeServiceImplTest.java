@@ -16,17 +16,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FindProductCategoriesByNameLikeServiceImplTest {
+class FindProductCategoriesByNameLikeServiceImplTest {
     @Mock ProductCategoryRepository productCategoryRepository;
     FindProductCategoriesByNameLikeServiceImpl findProductCategoriesByNameLikeService;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         findProductCategoriesByNameLikeService = new FindProductCategoriesByNameLikeServiceImpl(productCategoryRepository);
     }
 
     @Test
-    public void shouldFindProductCategoriesByName() {
+    void shouldFindProductCategoriesByName() {
         String name = "Bebidas";
         List<ProductCategory> expectedCategories = Arrays.asList(new ProductCategory());
         when(productCategoryRepository.findByNameLike(name)).thenReturn(expectedCategories);
@@ -37,7 +37,7 @@ public class FindProductCategoriesByNameLikeServiceImplTest {
     }
 
     @Test
-    public void shouldSearchProductCategoriesByEmptyStringWhenNameIsNull() {
+    void shouldSearchProductCategoriesByEmptyStringWhenNameIsNull() {
         String name = null;
         String emptyString = "";
         List<ProductCategory> expectedCategories = Arrays.asList(new ProductCategory());

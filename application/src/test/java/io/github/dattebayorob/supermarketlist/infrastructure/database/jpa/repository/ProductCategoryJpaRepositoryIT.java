@@ -14,19 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class ProductCategoryJpaRepositoryIT {
+class ProductCategoryJpaRepositoryIT {
     static final UUID CATEGORY_ID = UUID.fromString("343ef472-8e6a-493a-bfb1-252bc1802ee7");
     @Autowired ProductCategoryJpaRepository repository;
 
     @Test
-    public void shouldFetchAllProductCategories() {
+    void shouldFetchAllProductCategories() {
         ProductCategoryJpa drinks = new ProductCategoryJpa();
         drinks.setId(CATEGORY_ID);
         List<ProductCategoryJpa> categories = repository.findByNameContainingIgnoreCase("");
         assertThat(categories).isNotEmpty().contains(drinks);
     }
     @Test
-    public void shouldFindProductCategoriesByName() {
+    void shouldFindProductCategoriesByName() {
         ProductCategoryJpa drinks = new ProductCategoryJpa();
         drinks.setId(CATEGORY_ID);
         List<ProductCategoryJpa> categories = repository.findByNameContainingIgnoreCase("bebidas");

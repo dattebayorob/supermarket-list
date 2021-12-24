@@ -18,12 +18,12 @@ class ProductSelectionQuantityServiceImplTest {
     ProductSelectionQuantityServiceImpl productSelectionQuantityService;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         productSelectionQuantityService = new ProductSelectionQuantityServiceImpl(productSelectionRepository);
     }
 
     @Test
-    public void shouldDecreaseProductQuantityIfItExistsAndISMoreThenZero() {
+    void shouldDecreaseProductQuantityIfItExistsAndISMoreThenZero() {
         UUID productSelectionId = UUID.randomUUID();
         when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
                 .thenReturn(Optional.of(5));
@@ -34,7 +34,7 @@ class ProductSelectionQuantityServiceImplTest {
     }
 
     @Test
-    public void shouldNotDecreaseProductIfItNotExistsOrQuantityIsLessOrEqualToZero() {
+    void shouldNotDecreaseProductIfItNotExistsOrQuantityIsLessOrEqualToZero() {
         UUID productSelectionId = UUID.randomUUID();
         when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
                 .thenReturn(Optional.empty());
@@ -45,7 +45,7 @@ class ProductSelectionQuantityServiceImplTest {
     }
 
     @Test
-    public void shouldIncreaseProductQuantityIfITExists() {
+    void shouldIncreaseProductQuantityIfITExists() {
         UUID productSelectionId = UUID.randomUUID();
         when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
                 .thenReturn(Optional.of(5));
@@ -56,7 +56,7 @@ class ProductSelectionQuantityServiceImplTest {
     }
 
     @Test
-    public void shouldSetProductQuantityToOneIfItDoesntExist() {
+    void shouldSetProductQuantityToOneIfItDoesntExist() {
         UUID productSelectionId = UUID.randomUUID();
         when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
                 .thenReturn(Optional.empty());
