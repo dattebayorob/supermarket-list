@@ -9,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CollectionUtilTest {
     @Test
-    public void shouldReturnTrueIfCollectionIsEmpty() {
+    void shouldReturnTrueIfCollectionIsEmpty() {
         assertTrue(CollectionUtil.isEmpty(new ArrayList<>()));
     }
     @Test
-    public void shouldReturnTrueIfCollectionIsNull() {
+    void shouldReturnTrueIfCollectionIsNull() {
         assertTrue(CollectionUtil.isEmpty(null));
     }
     @Test
-    public void shouldReturnFalseIfCollectionIsNotEmpty() {
+    void shouldReturnFalseIfCollectionIsNotEmpty() {
         var strings = Arrays.asList("");
         assertTrue(CollectionUtil.isNotEmpty(strings));
     }

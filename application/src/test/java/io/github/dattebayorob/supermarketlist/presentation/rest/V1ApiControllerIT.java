@@ -25,7 +25,7 @@ class V1ApiControllerIT {
     @MockBean ProductCategoryRepository productCategoryRepository;
 
     @Test
-    public void shouldGetProductCategoriesByName() throws Exception {
+    void shouldGetProductCategoriesByName() throws Exception {
         final UUID uuid = UUID.randomUUID();
         final String name = "Bebidas";
         final ProductCategory category = new ProductCategory(uuid, name);

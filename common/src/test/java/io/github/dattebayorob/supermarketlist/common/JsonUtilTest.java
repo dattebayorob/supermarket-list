@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JsonUtilTest {
     @Test
-    public void shouldSerializeToJsonString() {
+    void shouldSerializeToJsonString() {
         var representation = new Representation(1L, "Name");
         String json = "{\"id\":1,\"name\":\"Name\"}";
         assertEquals(json, JsonUtil.serialize(representation));

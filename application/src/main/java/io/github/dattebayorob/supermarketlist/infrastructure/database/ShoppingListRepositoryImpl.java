@@ -5,6 +5,7 @@ import io.github.dattebayorob.supermarketlist.port.in.ShoppingListRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +19,6 @@ public class ShoppingListRepositoryImpl implements ShoppingListRepository {
 
     @Override
     public List<ShoppingList> findAll(LocalDateTime after, LocalDateTime before) {
-        return null;
+        return Collections.emptyList();
     }
 }

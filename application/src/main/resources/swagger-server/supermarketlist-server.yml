@@ -10,7 +10,6 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "github.com"
-basePath: "/"
 tags:
   - name: "categories"
     description: "Categories"
@@ -50,7 +49,7 @@ definitions:
         type: "string"
       name:
         type: "string"
-  Error:
+  ErrorRepresentation:
     type: "object"
     properties:
       code:
