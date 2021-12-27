@@ -37,4 +37,5 @@ jobs:
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
           -Dsonar.projectKey=dattebayorob_supermarket-list \
           -Dsonar.dynamicAnalysis=reuseReports \
-          -Dsonar.core.codeCoveragePlugin=jacoco
+          -Dsonar.core.codeCoveragePlugin=jacoco \
+          -Dsonar.exclusions="db/migrations/**/*,**/config/*"
