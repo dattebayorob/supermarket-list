@@ -38,4 +38,4 @@ jobs:
           -Dsonar.projectKey=dattebayorob_supermarket-list \
           -Dsonar.dynamicAnalysis=reuseReports \
           -Dsonar.core.codeCoveragePlugin=jacoco \
-          -Dsonar.exclusions="db/migrations/**/*,**/config/*"
+          -Dsonar.exclusions="/**/db/migrations/**/*,**/config/*"
