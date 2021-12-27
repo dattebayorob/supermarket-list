@@ -20,7 +20,7 @@ public class Beans {
 
     @Bean
     public AddProductSelectionToProductListService addProductSelectionToProductListService() {
-        return new AddProductSelectionToProductListServiceImpl(productRepository, shoppingListRepository);
+        return new AddProductSelectionToProductListServiceImpl(productRepository, shoppingListRepository, productSelectionRepository);
     }
     @Bean
     public FindCurrentProductListService findCurrentProductListService() {
