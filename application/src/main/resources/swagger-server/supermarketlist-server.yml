@@ -39,9 +39,105 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ProductCategoryResponse"
-        "404":
-          description: "Not found"
+    post:
+      tags:
+        - 'categories'
+      summary: "Create a product category and return the created object"
+      operationId: "categories#saveCategory"
+      parameters:
+        - in: body
+          name: "category"
+          description: "Category representation"
+          required: true
+          schema:
+            $ref: '#/definitions/ProductCategoryRequest'
+      responses:
+        201:
+          description: ""
+          schema:
+            $ref: "#/definitions/ProductCategoryResponse"
+        400:
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/ErrorRepresentation"
+  /v1/categories/{id}:
+    put:
+      tags:
+        - "categories"
+      summary: "Update a category"
+      operationId: "categories#updateCategory"
+      parameters:
+        - in: path
+          name: "id"
+          required: true
+          type:
+            "string"
+        - in: body
+          name: "category"
+          description: "Category request representation"
+          required: true
+          schema:
+            $ref: "#/definitions/ProductCategoryRequest"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/ProductCategoryResponse"
+        400:
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/ErrorRepresentation"
+  /v1/categories/{categoryId}/products:
+    get:
+      tags:
+        - "categories"
+        - "products"
+      summary: "Select All Products of given category"
+      operationId: "categories#findProductsByCategoryId"
+      parameters:
+        - in: path
+          name: "categoryId"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductResponse"
+        404:
+          description: "No product category was found for the given id"
+  /v1/products:
+    get:
+      tags:
+        - "products"
+      summary: "List products"
+      operationId: "products#findAll"
+      parameters:
+        - in: "query"
+          name: "name"
+          type: "string"
+        - in: "query"
+          name: "category"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+      responses:
+        200:
+          description: "Collection of products"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductResponse"
 definitions:
+  ProductCategoryRequest:
+    required:
+      - name
+    type: "object"
+    properties:
+      name:
+        type: "string"
   ProductCategoryResponse:
     type: "object"
     properties:
@@ -65,6 +161,15 @@ definitions:
               type: "string"
             message:
               type: "string"
+  ProductResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      category:
+        $ref: '#/definitions/ProductCategoryResponse'
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

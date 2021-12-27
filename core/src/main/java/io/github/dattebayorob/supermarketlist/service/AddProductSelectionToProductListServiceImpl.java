@@ -5,6 +5,7 @@ import io.github.dattebayorob.supermarketlist.exception.BusinessException;
 import io.github.dattebayorob.supermarketlist.exception.ProductNotFoundException;
 import io.github.dattebayorob.supermarketlist.exception.ShoppingListNotFoundException;
 import io.github.dattebayorob.supermarketlist.port.in.ProductRepository;
+import io.github.dattebayorob.supermarketlist.port.in.ProductSelectionRepository;
 import io.github.dattebayorob.supermarketlist.port.in.ShoppingListRepository;
 import io.github.dattebayorob.supermarketlist.port.out.AddProductSelectionToProductListService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class AddProductSelectionToProductListServiceImpl implements AddProductSelectionToProductListService {
     private final ProductRepository productRepository;
     private final ShoppingListRepository shoppingListRepository;
+    private final ProductSelectionRepository productSelectionRepository;
     @Override
     public void addProductSelectionToShoppingList(UUID shoppingListId, ProductSelection productSelection) {
         var shoppingList = shoppingListRepository.findById(shoppingListId)
@@ -23,12 +25,12 @@ public class AddProductSelectionToProductListServiceImpl implements AddProductSe
             throw  new BusinessException("Shopping list is locked");
         }
         if ( !productRepository.existsById(productSelection.getProduct().getId()) ) {
-            throw new ProductNotFoundException(shoppingListId);
+            throw new ProductNotFoundException(productSelection.getProduct().getId());
         }
         if ( productSelection.getQuantity() == null || productSelection.getQuantity() <= 0 ) {
             productSelection.setQuantity(1);
         }
         productSelection.setShoppingList(shoppingList);
-
+        productSelectionRepository.save(productSelection);
     }
 }

@@ -6,12 +6,15 @@ spring:
     admin:
       jmx-name: supermarket-list
   profiles:
-    active: dev, in-memory
+    active: dev, database
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
     open-in-view: false
+  flyway:
+    locations:
+      - classpath:/db/migration
 logging:
   level:
     root: info
@@ -40,6 +43,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
+  flyway:
+    locations:
+      - classpath:/db/migration/common
+      - classpath:/db/migration/database
 ---
 spring:
   config:
@@ -56,6 +63,10 @@ spring:
   h2:
     console:
       enabled: true
+  flyway:
+    locations:
+      - classpath:/db/migration/common
+      - classpath:/db/migration/inmemory
 ---
 spring:
   config:

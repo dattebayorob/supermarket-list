@@ -42,4 +42,12 @@ public class Beans {
     public FindProductCategoriesByNameLikeService findProductCategoriesByNameLikeService() {
         return new FindProductCategoriesByNameLikeServiceImpl(productCategoryRepository);
     }
+    @Bean
+    public SaveProductCategoryService saveProductCategoryService() {
+        return new SaveProductCategoryServiceImpl(productCategoryRepository);
+    }
+    @Bean
+    public UpdateProductCategoryService updateProductCategoryService() {
+        return new UpdateProducCategoryServiceImpl(productCategoryRepository);
+    }
 }

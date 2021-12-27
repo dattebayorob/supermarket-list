@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class BusinessException extends RuntimeException {
-    private String code;
+    private String code = ErrorCode.GENERIC_BUSINESS_ERROR;
     private final List<Error> errors;
     public BusinessException(String message) {
         super(message);
