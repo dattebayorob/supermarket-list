@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface ProductCategoryJpaRepository extends JpaRepository<ProductCategoryJpa, UUID> {
     List<ProductCategoryJpa> findByNameContainingIgnoreCase(String name);
+    boolean existsByName(String name);
+    boolean existsByNameAndIdNot(String name, UUID id);
 }

@@ -1,24 +1,45 @@
 package io.github.dattebayorob.supermarketlist.infrastructure.mapper;
 
-import io.github.dattebayorob.supermarketlist.common.CollectionUtil;
 import io.github.dattebayorob.supermarketlist.domain.Product;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductJpa;
+import io.github.dattebayorob.supermarketlist.infrastructure.mapper.abstraction.DomainMapper;
+import io.github.dattebayorob.supermarketlist.infrastructure.mapper.abstraction.ResponseMapper;
+import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class ProductMapper {
+@RequiredArgsConstructor
+public class ProductMapper implements
+        DomainMapper<Product, ProductJpa>,
+        ResponseMapper<Product, ProductResponse> {
+    private final ProductCategoryMapper productCategoryMapper;
+    @Override
     public Product toDomain(ProductJpa entity) {
-        return null;
+        var domain = new Product();
+        domain.setId(entity.getId());
+        domain.setName(entity.getName());
+        domain.setCategory(productCategoryMapper.toDomain(
+            entity.getCategory()
+        ));
+        return domain;
     }
-    public List<Product> toDomain(List<ProductJpa> entities) {
-        return CollectionUtil.map(entities, this::toDomain);
-    }
+    @Override
     public ProductJpa toEntity(Product product) {
-        return null;
+        var entity = new ProductJpa();
+        entity.setId(product.getId());
+        entity.setName(product.getName());
+        entity.setCategory(productCategoryMapper.toEntity(
+            product.getCategory()
+        ));
+        return entity;
     }
-    public List<ProductJpa> toEntity(List<Product> products) {
-        return CollectionUtil.map(products, this::toEntity);
+
+    @Override
+    public ProductResponse toResponse(Product domain) {
+        return new ProductResponse()
+                .id(domain.getId().toString())
+                .name(domain.getName())
+                .category(productCategoryMapper.toResponse(domain.getCategory()));
     }
 }
