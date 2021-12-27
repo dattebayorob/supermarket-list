@@ -16,7 +16,7 @@ public class ProductFilters {
         setCategoryId(categoryId);
     }
     public void setName(String name) {
-        this.name = name == null ? "" : "";
+        this.name = name == null ? "" : name;
     }
     public void setCategoryId(String categoryId) {
         if (StringUtil.isNotEmpty(categoryId)) {
