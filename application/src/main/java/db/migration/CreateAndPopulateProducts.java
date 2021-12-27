@@ -30,7 +30,7 @@ public abstract class CreateAndPopulateProducts extends JavaMigration {
     private void populateProducts(Statement select) throws SQLException {
         var lines = new StringBuilder("insert into\n\tproduct(id, name, category_id)\nvalues\n");
         for ( String product : new String[] { "Pão de Forma", "Pão bola", "Café"} ) {
-            lines.append(String.format("\t('%s', '%s', '%s'),\n", UUID.randomUUID(), product, CATEGORY_CAFE_MANHA));
+            lines.append(String.format("\t('%s', '%s', '%s'),%n", UUID.randomUUID(), product, CATEGORY_CAFE_MANHA));
         }
         lines.append(String.format("\t('%s','%s','%s');", UUID.randomUUID(), "Cominho", CATEGORY_TEMPEROS));
         select.execute(lines.toString());

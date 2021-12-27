@@ -21,5 +21,5 @@ public abstract class JavaMigration extends BaseJavaMigration {
     }
     protected boolean isInMemory() {
         return false;
-    };
+    }
 }
