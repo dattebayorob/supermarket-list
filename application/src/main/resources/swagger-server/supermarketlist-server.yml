@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: ""
+  description: "Supermarket List"
   version: "1.0.0"
   title: "Supermarketlist"
   termsOfService: "http://swagger.io/terms/"
@@ -9,10 +9,15 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "github.com"
 tags:
   - name: "categories"
     description: "Categories"
+  - name: "products"
+    description: "Products"
+  - name: "shopping-lists"
+    description: "Shopping Lists"
+  - name: "shopping-list-products"
+    description: "Products of a shopping list"
 schemes:
   - "https"
   - "http"
@@ -90,7 +95,6 @@ paths:
   /v1/categories/{categoryId}/products:
     get:
       tags:
-        - "categories"
         - "products"
       summary: "Select All Products of given category"
       operationId: "categories#findProductsByCategoryId"
@@ -130,6 +134,126 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ProductResponse"
+  /v1/lists/{shoppingListId}/products:
+    get:
+      tags:
+        - "shopping-list-products"
+      summary: "Shopping list products"
+      operationId: "shopping-list-products#findAll"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          required: true
+      responses:
+        200:
+          description: "Collection of products"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductSelectionResponse"
+        404:
+          description: "Shopping list not found"
+
+  /v1/lists/{shoppingListId}/products/{productId}:
+    put:
+      tags:
+        - "shopping-list-products"
+      summary: "Put a product in given shopping list"
+      operationId: "shopping#products#putProductInList"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "query"
+          name: "quantity"
+          type: "integer"
+          required: false
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
+    delete:
+      tags:
+        - "products"
+      summary: "Remove a product from given shopping list"
+      operationId: "shopping#products#removeProductInList"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
+  /v1/lists/{shoppingListId}/products/{productId}/quantity:
+    post:
+      tags:
+        - "shopping-list-products"
+      summary: "Increase product total on list"
+      operationId: "shopping#products#increaseProductsInList"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
+    delete:
+      tags:
+        - "shopping-list-products"
+      summary: "Decrease products on list"
+      operationId: "shopping#products#decreaseProductsInList"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
 definitions:
   ProductCategoryRequest:
     required:
@@ -170,6 +294,19 @@ definitions:
         type: "string"
       category:
         $ref: '#/definitions/ProductCategoryResponse'
+  ProductSelectionResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      category:
+        $ref: '#/definitions/ProductCategoryResponse'
+      quantity:
+        type: "integer"
+      shoppingListId:
+        type: "string"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

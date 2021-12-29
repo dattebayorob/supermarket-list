@@ -1,11 +1,12 @@
 package db.migration;
 
+import db.migration.abstraction.ConditionalJavaMigration;
 import db.migration.abstraction.JavaMigration;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class CreateAndPopulateProductCategories extends JavaMigration {
+public abstract class CreateAndPopulateProductCategories extends ConditionalJavaMigration {
     @Override
     protected void migrate(Statement statement) throws SQLException {
         enableUUIDExtension(statement);

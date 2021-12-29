@@ -2,11 +2,8 @@ package io.github.dattebayorob.supermarketlist.domain;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
-public class ProductSelection implements IdAware{
-    private UUID id;
+public class ProductSelection {
     private Product product;
     private Integer quantity;
     private ShoppingList shoppingList;

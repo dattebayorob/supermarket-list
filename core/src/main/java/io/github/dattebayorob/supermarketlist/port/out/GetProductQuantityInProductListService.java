@@ -4,5 +4,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GetProductQuantityInProductListService {
-    Optional<Integer> getProductQuantityInProductList(UUID productSelectionId);
+    Optional<Integer> getProductQuantityInProductList(UUID productId, UUID shoppingListID);
 }

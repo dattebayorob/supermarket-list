@@ -22,10 +22,7 @@ public class Beans {
     public AddProductSelectionToProductListService addProductSelectionToProductListService() {
         return new AddProductSelectionToProductListServiceImpl(productRepository, shoppingListRepository, productSelectionRepository);
     }
-    @Bean
-    public FindCurrentProductListService findCurrentProductListService() {
-        return new FindCurrentProductListServiceImpl(productRepository);
-    }
+
     @Bean
     public FindShoppingListsService findProductListsService() {
         return new FindShoppingListsServiceImpl(shoppingListRepository);
@@ -49,5 +46,13 @@ public class Beans {
     @Bean
     public UpdateProductCategoryService updateProductCategoryService() {
         return new UpdateProducCategoryServiceImpl(productCategoryRepository);
+    }
+    @Bean
+    public RemoveProductFromShoppingListService removeProductFromShoppingListService() {
+        return new RemoveProductSelectionToShoppingListServiceImpl(productSelectionRepository, shoppingListRepository, productRepository);
+    }
+    @Bean
+    public FindProductsByShoppingListIdService findProductsByShoppingListIdService() {
+        return new FindProductsByShoppingListIdServiceImpl(shoppingListRepository,productSelectionRepository);
     }
 }

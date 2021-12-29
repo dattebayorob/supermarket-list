@@ -5,6 +5,8 @@ import org.flywaydb.core.api.migration.Context;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class JavaMigration extends BaseJavaMigration {
     @Override
@@ -16,10 +18,7 @@ public abstract class JavaMigration extends BaseJavaMigration {
 
     protected abstract void migrate(Statement statement) throws SQLException;
 
-    protected String getIdColumnLine() {
-        return "\tid UUID default " + (isInMemory() ? "random_uuid()" : "uuid_generate_v4()") + " not null,\n";
-    }
-    protected boolean isInMemory() {
-        return false;
+    protected void execute(Statement statement, String ... statements) throws SQLException {
+        statement.execute(Stream.of(statements).collect(Collectors.joining(" \n")));
     }
 }
