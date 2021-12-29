@@ -19,29 +19,29 @@ public class ProductSelectionQuantityServiceImpl implements
     private final ProductSelectionRepository productSelectionRepository;
 
     @Override
-    public void decreaseProductQuantityInProductList(UUID productSelectionId) {
-        getProductQuantityInProductList(productSelectionId)
+    public void decreaseProductQuantityInProductList(UUID productId, UUID shoppingListId) {
+        getProductQuantityInProductList(productId, shoppingListId)
                 .filter(quantity -> quantity > 0)
                 .ifPresent(
-                    quantity -> updateProductQuantityInProductListService(productSelectionId, quantity -1)
+                    quantity -> updateProductQuantityInProductListService(productId, shoppingListId, quantity -1)
                 );
     }
 
     @Override
-    public void increaseProductQuantityInProductList(UUID productSelectionId) {
-        int quantity = getProductQuantityInProductList(productSelectionId)
+    public void increaseProductQuantityInProductList(UUID productId, UUID shoppingListId) {
+        int quantity = getProductQuantityInProductList(productId, shoppingListId)
                 .map(productQuantity -> productQuantity + 1)
                 .orElse(1);
-        updateProductQuantityInProductListService(productSelectionId, quantity);
+        updateProductQuantityInProductListService(productId, shoppingListId, quantity);
     }
 
     @Override
-    public void updateProductQuantityInProductListService(UUID productSelectionId, Integer quantity) {
-        productSelectionRepository.updateProductSelectionQuantity(productSelectionId, quantity);
+    public void updateProductQuantityInProductListService(UUID productId, UUID shoppingListId, Integer quantity) {
+        productSelectionRepository.updateProductSelectionQuantity(productId, shoppingListId, Optional.ofNullable(quantity).orElse(1));
     }
 
     @Override
-    public Optional<Integer> getProductQuantityInProductList(UUID productSelectionId) {
-        return productSelectionRepository.getProductSelectionQuantity(productSelectionId);
+    public Optional<Integer> getProductQuantityInProductList(UUID productId, UUID shoppingListId) {
+        return productSelectionRepository.getProductSelectionQuantity(productId, shoppingListId);
     }
 }

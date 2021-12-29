@@ -9,7 +9,7 @@ public interface DomainMapper<D,E> {
     default List<E> toEntity(List<D> domain) {
         return CollectionUtil.map(domain, this::toEntity);
     }
-    D toDomain(E domain);
+    D toDomain(E entity);
     default List<D> toDomain(List<E> entities) {
         return CollectionUtil.map(entities, this::toDomain);
     }

@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface ProductRepository {
     List<Product> findAll(ProductFilters filters);
+    List<Product> findByShoppingListId(UUID shoppingListId);
     boolean existsById(UUID id);
 }

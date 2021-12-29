@@ -11,9 +11,14 @@ import java.util.UUID;
 public class ProductFilters {
     private String name;
     private UUID categoryId;
+    private UUID shoppingListIdToIgnore;
     public ProductFilters(String name, String categoryId) {
+        this(name, categoryId, null);
+    }
+    public ProductFilters(String name, String categoryId, String shoppingListIdToIgnore) {
         setName(name);
         setCategoryId(categoryId);
+        setShoppingListIdToIgnore(shoppingListIdToIgnore);
     }
     public void setName(String name) {
         this.name = name == null ? "" : name;
@@ -21,6 +26,11 @@ public class ProductFilters {
     public void setCategoryId(String categoryId) {
         if (StringUtil.isNotEmpty(categoryId)) {
             this.categoryId = UUID.fromString(categoryId);
+        }
+    }
+    public void setShoppingListIdToIgnore(String shoppingListIdToIgnore) {
+        if (StringUtil.isNotEmpty(shoppingListIdToIgnore)) {
+            this.shoppingListIdToIgnore = UUID.fromString(shoppingListIdToIgnore);
         }
     }
 }

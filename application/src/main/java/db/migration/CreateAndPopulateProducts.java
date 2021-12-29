@@ -1,12 +1,12 @@
 package db.migration;
 
-import db.migration.abstraction.JavaMigration;
+import db.migration.abstraction.ConditionalJavaMigration;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 
-public abstract class CreateAndPopulateProducts extends JavaMigration {
+public abstract class CreateAndPopulateProducts extends ConditionalJavaMigration {
     private static final String CATEGORY_TEMPEROS = "7a4b5ca8-4beb-41ec-941f-2e44abafb05d";
     private static final String CATEGORY_CAFE_MANHA = "f5dbc5e7-4ab6-40f6-93ad-209116fa49a1";
 

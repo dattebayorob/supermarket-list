@@ -32,4 +32,10 @@ public class ProductRepositoryImpl implements ProductRepository{
     public boolean existsById(UUID id) {
         return productJpaRepository.existsById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Product> findByShoppingListId(UUID shoppingListId) {
+        return productMapper.toDomain(productJpaRepository.findByShoppingListId(shoppingListId));
+    }
 }

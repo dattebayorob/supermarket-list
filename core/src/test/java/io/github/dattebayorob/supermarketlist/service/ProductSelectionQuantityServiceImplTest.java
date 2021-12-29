@@ -24,45 +24,50 @@ class ProductSelectionQuantityServiceImplTest {
 
     @Test
     void shouldDecreaseProductQuantityIfItExistsAndISMoreThenZero() {
-        UUID productSelectionId = UUID.randomUUID();
-        when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
+        UUID productId = UUID.randomUUID();
+        UUID shoppingListId = UUID.randomUUID();
+        when(productSelectionRepository.getProductSelectionQuantity(productId, shoppingListId))
                 .thenReturn(Optional.of(5));
 
-        productSelectionQuantityService.decreaseProductQuantityInProductList(productSelectionId);
+        productSelectionQuantityService.decreaseProductQuantityInProductList(productId, shoppingListId);
 
-        verify(productSelectionRepository).updateProductSelectionQuantity(productSelectionId, 4);
+        verify(productSelectionRepository).updateProductSelectionQuantity(productId, shoppingListId, 4);
     }
 
     @Test
     void shouldNotDecreaseProductIfItNotExistsOrQuantityIsLessOrEqualToZero() {
-        UUID productSelectionId = UUID.randomUUID();
-        when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
+        UUID productId = UUID.randomUUID();
+        UUID shoppingListId = UUID.randomUUID();
+        when(productSelectionRepository.getProductSelectionQuantity(productId, shoppingListId))
                 .thenReturn(Optional.empty());
 
-        productSelectionQuantityService.decreaseProductQuantityInProductList(productSelectionId);
-        verify(productSelectionRepository).getProductSelectionQuantity(productSelectionId);
+        productSelectionQuantityService.decreaseProductQuantityInProductList(productId, shoppingListId);
+        verify(productSelectionRepository).getProductSelectionQuantity(productId, shoppingListId);
         verifyNoMoreInteractions(productSelectionRepository);
     }
 
     @Test
     void shouldIncreaseProductQuantityIfITExists() {
-        UUID productSelectionId = UUID.randomUUID();
-        when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
+        UUID productId = UUID.randomUUID();
+        UUID shoppingListId = UUID.randomUUID();
+
+        when(productSelectionRepository.getProductSelectionQuantity(productId, shoppingListId))
                 .thenReturn(Optional.of(5));
 
-        productSelectionQuantityService.increaseProductQuantityInProductList(productSelectionId);
+        productSelectionQuantityService.increaseProductQuantityInProductList(productId, shoppingListId);
 
-        verify(productSelectionRepository).updateProductSelectionQuantity(productSelectionId, 6);
+        verify(productSelectionRepository).updateProductSelectionQuantity(productId, shoppingListId, 6);
     }
 
     @Test
     void shouldSetProductQuantityToOneIfItDoesntExist() {
-        UUID productSelectionId = UUID.randomUUID();
-        when(productSelectionRepository.getProductSelectionQuantity(productSelectionId))
+        UUID productId = UUID.randomUUID();
+        UUID shoppingListId = UUID.randomUUID();
+        when(productSelectionRepository.getProductSelectionQuantity(productId, shoppingListId))
                 .thenReturn(Optional.empty());
 
-        productSelectionQuantityService.increaseProductQuantityInProductList(productSelectionId);
+        productSelectionQuantityService.increaseProductQuantityInProductList(productId, shoppingListId);
 
-        verify(productSelectionRepository).updateProductSelectionQuantity(productSelectionId, 1);
+        verify(productSelectionRepository).updateProductSelectionQuantity(productId, shoppingListId, 1);
     }
 }

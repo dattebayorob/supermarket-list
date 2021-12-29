@@ -5,6 +5,7 @@ import io.github.dattebayorob.supermarketlist.exception.ErrorCode;
 import io.github.dattebayorob.supermarketlist.exception.ResourceNotFoundException;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ErrorRepresentation;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ErrorRepresentationErrors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
 
@@ -43,6 +45,7 @@ public class RestControllerAdvice {
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorRepresentation> handleThrowable(Throwable exception) {
+        log.error("{}", exception);
         ErrorRepresentation error = new ErrorRepresentation().code(ErrorCode.INTERNAL_SERVER_ERROR).message(exception.getMessage());
         return ResponseEntity.internalServerError().body(error);
     }
