@@ -1,6 +1,11 @@
 package io.github.dattebayorob.supermarketlist.presentation.rest;
 
-import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.*;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.category.FindProductCategoriesEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.category.SaveProductCategoryEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.category.UpdateCategoryEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.FindProductEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.ProductsByProductCategoryIdEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglistproduct.*;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductCategoryRequest;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductCategoryResponse;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductResponse;
@@ -14,8 +19,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class V1ApiController implements V1Api{
-    private final ProductCategoryEndpoint productCategoryEndpoint;
-    private final ProductEndpoint productEndpoint;
+    private final FindProductCategoriesEndpoint findProductCategoriesEndpoint;
+    private final SaveProductCategoryEndpoint saveProductCategoryEndpoint;
+    private final UpdateCategoryEndpoint productCategoryEndpoint;
+    private final FindProductEndpoint productEndpoint;
     private final ProductsByProductCategoryIdEndpoint productsByProductCategoryIdEndpoint;
     private final DecreaseProductOnListEndpoint decreaseProductOnListEndpoint;
     private final IncreaseProductOnListEndpoint increaseProductOnListEndpoint;
@@ -25,12 +32,12 @@ public class V1ApiController implements V1Api{
 
     @Override
     public ResponseEntity<List<ProductCategoryResponse>> categoriesFindCategories(String name) {
-        return productCategoryEndpoint.findCategoriesByName(name);
+        return findProductCategoriesEndpoint.findCategoriesByName(name);
     }
 
     @Override
     public ResponseEntity<ProductCategoryResponse> categoriesSaveCategory(ProductCategoryRequest category) {
-        return productCategoryEndpoint.saveCategoy(category);
+        return saveProductCategoryEndpoint.saveCategoy(category);
     }
 
     @Override
