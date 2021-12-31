@@ -8,4 +8,5 @@ public class ProductSelection {
     private Integer quantity;
     private ShoppingList shoppingList;
     private User user;
+    private boolean checked;
 }

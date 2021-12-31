@@ -29,6 +29,8 @@ public class V1ApiController implements V1Api{
     private final UpdateProductQuantityOnListEndpoint updateProductQuantityOnListEndpoint;
     private final RemoveProductFromListEndpoint removeProductFromListEndpoint;
     private final FindProductsByShoppingListEndpoint findProductsByShoppingListEndpoint;
+    private final CheckProductInListEndpoint checkProductInListEndpoint;
+    private final UncheckProductInListEndpoint uncheckProductInListEndpoint;
 
     @Override
     public ResponseEntity<List<ProductCategoryResponse>> categoriesFindCategories(String name) {
@@ -78,5 +80,15 @@ public class V1ApiController implements V1Api{
     @Override
     public ResponseEntity<List<ProductSelectionResponse>> shoppingListProductsFindAll(String shoppingListId) {
         return findProductsByShoppingListEndpoint.findByProductListId(shoppingListId);
+    }
+
+    @Override
+    public ResponseEntity<Void> shoppingProductsCheck(String shoppingListId, String productId) {
+        return checkProductInListEndpoint.check(shoppingListId, productId);
+    }
+
+    @Override
+    public ResponseEntity<Void> shoppingProductsUncheck(String shoppingListId, String productId) {
+        return uncheckProductInListEndpoint.unCheck(shoppingListId, productId);
     }
 }

@@ -17,7 +17,8 @@ public interface ProductSelectionJpaRepository extends JpaRepository<ProductSele
             "\tcast(pc.id as varchar) as productCategoryId,\n" +
             "\tpc.name as productCategoryName,\n" +
             "\tcast(ps.shoppinglist_id as varchar) as shoppinglistId,\n" +
-            "\tps.quantity as quantity \n" +
+            "\tps.quantity as quantity, \n" +
+            "\tps.checked as checked \n" +
             "from product p\n" +
             "\tjoin product_selection ps on ps.product_id = p.id\n" +
             "\tjoin product_category pc on p.category_id  = pc.id\n" +

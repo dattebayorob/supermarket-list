@@ -9,4 +9,5 @@ public interface ProductSelectionProjection {
     UUID getProductCategoryId();
     String getProductCategoryName();
     int getQuantity();
+    Boolean getChecked();
 }
