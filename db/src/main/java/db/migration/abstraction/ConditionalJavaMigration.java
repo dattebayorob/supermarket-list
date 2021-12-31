@@ -1,4 +1,4 @@
-package io.github.dattebayorob.supermarketlist.config.db.migration.abstraction;
+package db.migration.abstraction;
 
 public abstract class ConditionalJavaMigration extends JavaMigration{
     protected String getIdColumnLine() {

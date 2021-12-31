@@ -1,4 +1,4 @@
-package io.github.dattebayorob.supermarketlist.config.db.migration.abstraction;
+package db.migration.abstraction;
 
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;

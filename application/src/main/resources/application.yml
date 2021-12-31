@@ -44,8 +44,8 @@ spring:
     password: postgres
   flyway:
     locations:
-      - classpath:/io/github/dattebayorob/supermarketlist/config/db/migration/common
-      - classpath:/io/github/dattebayorob/supermarketlist/config/db/migration/database
+      - classpath:/db/migration/common
+      - classpath:/db/migration/database
 ---
 spring:
   config:
@@ -64,8 +64,8 @@ spring:
       enabled: true
   flyway:
     locations:
-      - classpath:/io/github/dattebayorob/supermarketlist/config/db/migration/common
-      - classpath:/io/github/dattebayorob/supermarketlist/config/db/migration/inmemory
+      - classpath:/db/migration/common
+      - classpath:/db/migration/inmemory
 ---
 spring:
   config:
