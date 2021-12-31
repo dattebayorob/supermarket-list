@@ -6,6 +6,7 @@ import io.github.dattebayorob.supermarketlist.port.in.ProductSelectionRepository
 import io.github.dattebayorob.supermarketlist.port.in.ShoppingListRepository;
 import io.github.dattebayorob.supermarketlist.port.out.*;
 import io.github.dattebayorob.supermarketlist.service.*;
+import io.github.dattebayorob.supermarketlist.service.validation.ValidateShoppingListAndProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,5 +55,15 @@ public class Beans {
     @Bean
     public FindProductsByShoppingListIdService findProductsByShoppingListIdService() {
         return new FindProductsByShoppingListIdServiceImpl(shoppingListRepository,productSelectionRepository);
+    }
+    @Bean
+    public ValidateShoppingListAndProduct validateShoppingListAndProduct() {
+        return new ValidateShoppingListAndProduct(shoppingListRepository, productRepository);
+    }
+    @Bean
+    public CheckOrUncheckProductInListServiceImpl checkOrUncheckProductInListService(
+            final ValidateShoppingListAndProduct validateShoppingListAndProduct, final ProductSelectionRepository productSelectionRepository
+    ) {
+        return new CheckOrUncheckProductInListServiceImpl(validateShoppingListAndProduct, productSelectionRepository);
     }
 }

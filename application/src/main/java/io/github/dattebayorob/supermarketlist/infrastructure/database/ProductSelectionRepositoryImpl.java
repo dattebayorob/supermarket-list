@@ -53,4 +53,9 @@ public class ProductSelectionRepositoryImpl implements ProductSelectionRepositor
     public List<ProductSelection> findByShoppingListId(UUID shoppingListId) {
         return CollectionUtil.map(productSelectionJpaRepository.findByShoppingListId(shoppingListId), productSelectionMapper::toDomain);
     }
+
+    @Override
+    public Optional<ProductSelection> findByShoppingListIdAndProductId(UUID shoppingListId, UUID productId) {
+        return productSelectionJpaRepository.findById(new ProductSelectionId(productId, shoppingListId)).map(productSelectionMapper::toDomain);
+    }
 }

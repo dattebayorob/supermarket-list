@@ -254,6 +254,53 @@ paths:
           description: "Accepted"
         404:
           description: "Shopping List or product not found"
+  /v1/lists/{shoppingListId}/products/{productId}/checked:
+    put:
+      tags:
+        - "shopping-list-products"
+      summary: "Toggle product as checked in list"
+      operationId: "shopping#products#check"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
+    delete:
+      tags:
+        - "shopping-list-products"
+      summary: "Toggle product as unchecked in list"
+      operationId: "shopping#products#uncheck"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+        - in: "path"
+          name: "productId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+          required: true
+      responses:
+        204:
+          description: "Accepted"
+        404:
+          description: "Shopping List or product not found"
 definitions:
   ProductCategoryRequest:
     required:
@@ -307,6 +354,8 @@ definitions:
         type: "integer"
       shoppingListId:
         type: "string"
+      checked:
+        type: "boolean"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

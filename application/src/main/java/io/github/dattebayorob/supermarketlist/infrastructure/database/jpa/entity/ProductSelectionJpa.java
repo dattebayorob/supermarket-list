@@ -18,6 +18,7 @@ public class ProductSelectionJpa {
     @EmbeddedId
     private ProductSelectionId id;
     private int quantity;
+    private boolean checked;
     public ProductSelectionJpa(UUID productId, UUID shoppingListId) {
         this.id = new ProductSelectionId(productId, shoppingListId);
     }

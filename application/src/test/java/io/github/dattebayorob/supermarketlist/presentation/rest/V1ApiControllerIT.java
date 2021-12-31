@@ -2,7 +2,11 @@ package io.github.dattebayorob.supermarketlist.presentation.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.dattebayorob.supermarketlist.domain.ProductCategory;
+import io.github.dattebayorob.supermarketlist.exception.BusinessException;
+import io.github.dattebayorob.supermarketlist.exception.ErrorCode;
+import io.github.dattebayorob.supermarketlist.exception.ShoppingListNotFoundException;
 import io.github.dattebayorob.supermarketlist.port.in.ProductCategoryRepository;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglistproduct.CheckProductInListEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductCategoryRequest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +38,8 @@ class V1ApiControllerIT {
     @Autowired MockMvc mockMvc;
     @Autowired ObjectMapper objectMapper;
     @MockBean ProductCategoryRepository productCategoryRepository;
+
+    @MockBean CheckProductInListEndpoint checkProductInListEndpoint;
 
     @Test
     void shouldGetProductCategoriesByName() throws Exception {
@@ -84,5 +91,46 @@ class V1ApiControllerIT {
                 .andExpect(jsonPath("$.name", Matchers.equalTo(name)));
         verify(productCategoryRepository).findById(id);
         verify(productCategoryRepository).save(any(ProductCategory.class));
+    }
+
+    @Test
+    void shoulReturnNotFoundIfListOrProductDoesNotExist() throws Exception{
+        String shoppingListId = UUID.randomUUID().toString();
+        String productId = UUID.randomUUID().toString();
+
+        String uri = String.format("/v1/lists/%s/products/%s/checked", shoppingListId, productId);
+
+        when(checkProductInListEndpoint.check(shoppingListId, productId))
+                .thenThrow(new ShoppingListNotFoundException(UUID.fromString(shoppingListId)));
+
+        mockMvc.perform(put(uri))
+                .andExpect(status().isNotFound());
+        verify(checkProductInListEndpoint).check(shoppingListId, productId);
+    }
+
+    @Test
+    void shoulReturnBadRequestIfListIsBlocked() throws Exception {
+        String shoppingListId = UUID.randomUUID().toString();
+        String productId = UUID.randomUUID().toString();
+
+        String uri = String.format("/v1/lists/%s/products/%s/checked", shoppingListId, productId);
+
+        when(checkProductInListEndpoint.check(shoppingListId, productId))
+                .thenThrow(new BusinessException(""));
+
+        mockMvc.perform(put(uri))
+                .andExpect(status().isBadRequest());
+        verify(checkProductInListEndpoint).check(shoppingListId, productId);
+    }
+
+    @Test
+    void shouldReturnBadRequestIfPathVariableUUIDIsInvalid() throws Exception {
+        String uri = String.format("/v1/lists/%s/products/%s/checked", UUID.randomUUID(), "invalid-uuid");
+
+        mockMvc.perform(put(uri))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", Matchers.equalTo(ErrorCode.REQUEST_PARAM_ERROR)))
+                .andExpect(jsonPath("$.errors[0].message", Matchers.equalTo("must match \"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$\"")))
+                .andExpect(jsonPath("$.errors[0].field", Matchers.equalTo("productId")));
     }
 }

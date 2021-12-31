@@ -26,6 +26,7 @@ public class ProductSelectionMapper implements
             domain.getProduct().getId(), domain.getShoppingList().getId()
         ));
         entity.setQuantity(domain.getQuantity());
+        entity.setChecked(domain.isChecked());
         return entity;
     }
 
@@ -37,6 +38,7 @@ public class ProductSelectionMapper implements
         domain.setProduct(new Product(productId));
         domain.setShoppingList(new ShoppingList(shoppingListId));
         domain.setQuantity(entity.getQuantity());
+        domain.setChecked(entity.isChecked());
         return domain;
     }
 
@@ -45,6 +47,7 @@ public class ProductSelectionMapper implements
         domain.setProduct(projectionToProduct(projection));
         domain.setShoppingList(new ShoppingList(projection.getShoppingListId()));
         domain.setQuantity(projection.getQuantity());
+        domain.setChecked(Boolean.TRUE.equals(projection.getChecked()));
         return domain;
     }
 
@@ -66,6 +69,7 @@ public class ProductSelectionMapper implements
                 .category(productCategoryMapper.toResponse(domain.getProduct().getCategory()))
                 .shoppingListId(domain.getShoppingList().getId().toString())
                 .quantity(domain.getQuantity())
+                .checked(domain.isChecked())
                 .name(domain.getProduct().getName());
     }
 }
