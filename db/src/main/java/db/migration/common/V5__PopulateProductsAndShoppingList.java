@@ -1,6 +1,6 @@
-package io.github.dattebayorob.supermarketlist.config.db.migration.common;
+package db.migration.common;
 
-import io.github.dattebayorob.supermarketlist.config.db.migration.abstraction.JavaMigration;
+import db.migration.abstraction.JavaMigration;
 
 import java.sql.SQLException;
 import java.sql.Statement;

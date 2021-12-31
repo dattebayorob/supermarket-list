@@ -1,6 +1,6 @@
-package io.github.dattebayorob.supermarketlist.config.db.migration.inmemory;
+package db.migration.inmemory;
 
-import io.github.dattebayorob.supermarketlist.config.db.migration.CreateAndPopulateProductCategories;
+import db.migration.CreateAndPopulateProductCategories;
 
 public class V1__CreateAndPopulateProductCategories extends CreateAndPopulateProductCategories {
     @Override

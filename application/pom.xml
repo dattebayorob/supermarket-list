@@ -16,6 +16,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <supermarket-list-core.version>0.1.0</supermarket-list-core.version>
         <supermarket-list-common.version>0.1.0</supermarket-list-common.version>
+        <supermarket-list-db.version>0.1.0</supermarket-list-db.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,11 @@
             <groupId>io.github.dattebayorob</groupId>
             <artifactId>supermarket-list-core</artifactId>
             <version>${supermarket-list-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.dattebayorob</groupId>
+            <artifactId>supermarket-list-db</artifactId>
+            <version>${supermarket-list-db.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,10 +72,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
