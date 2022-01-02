@@ -134,6 +134,42 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/ProductResponse"
+  /v1/lists:
+    post:
+      tags:
+        - "shopping-lists"
+      summary: "Create a shopping list with optional products"
+      operationId: "shopping-list#save"
+      parameters:
+        - in: "body"
+          name: "shoppingList"
+          required: true
+          schema:
+            $ref: "#/definitions/ShoppingListRequest"
+      responses:
+        201:
+          description: "The created shopping list representation"
+          schema:
+            $ref: "#/definitions/ShoppingListResponse"
+  /v1/lists/{shoppingListId}/clone:
+    post:
+      tags:
+        - "shopping-lists"
+      summary: "Clone a shopping list with products"
+      operationId: "shopping-list#clone"
+      parameters:
+        - in: "path"
+          name: "shoppingListId"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          required: true
+      responses:
+        201:
+          description: "The created shopping list representation"
+          schema:
+            $ref: "#/definitions/ShoppingListResponse"
+        404:
+          description: "Not found"
   /v1/lists/{shoppingListId}/products:
     get:
       tags:
@@ -341,6 +377,20 @@ definitions:
         type: "string"
       category:
         $ref: '#/definitions/ProductCategoryResponse'
+  ProductSelectionRequest:
+    type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: "string"
+        pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        maxLength: 36
+        minLength: 36
+      checked:
+        type: "boolean"
+      quantity:
+        type: "integer"
   ProductSelectionResponse:
     type: "object"
     properties:
@@ -355,6 +405,25 @@ definitions:
       shoppingListId:
         type: "string"
       checked:
+        type: "boolean"
+  ShoppingListRequest:
+    type: "object"
+    properties:
+      products:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductSelectionRequest"
+  ShoppingListResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      createdAt:
+        type: "string"
+        format: "date-time"
+      locked:
+        type: "boolean"
+      empty:
         type: "boolean"
 externalDocs:
   description: "Find out more about Swagger"

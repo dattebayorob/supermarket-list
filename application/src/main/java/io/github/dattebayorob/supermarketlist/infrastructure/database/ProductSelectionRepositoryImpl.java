@@ -21,10 +21,16 @@ public class ProductSelectionRepositoryImpl implements ProductSelectionRepositor
     private final ProductSelectionMapper productSelectionMapper;
     @Override
     public ProductSelection save(ProductSelection productSelection) {
-        var entity = productSelectionMapper.toEntity(productSelection);
-        return productSelectionMapper.toDomain(
-                productSelectionJpaRepository.save(entity)
-        );
+        return productSelectionMapper.toDomain(productSelectionJpaRepository.save(
+            productSelectionMapper.toEntity(productSelection)
+        ));
+    }
+
+    @Override
+    public List<ProductSelection> saveAll(List<ProductSelection> productSelections) {
+        return productSelectionMapper.toDomain(productSelectionJpaRepository.saveAll(
+            productSelectionMapper.toEntity(productSelections)
+        ));
     }
 
     @Override

@@ -5,11 +5,10 @@ import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.catego
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.category.UpdateCategoryEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.FindProductEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.ProductsByProductCategoryIdEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.CloneShoppingListEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.SaveShoppingListEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglistproduct.*;
-import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductCategoryRequest;
-import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductCategoryResponse;
-import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductResponse;
-import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductSelectionResponse;
+import io.github.dattebayorob.supermarketlist.presentation.rest.representation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +30,8 @@ public class V1ApiController implements V1Api{
     private final FindProductsByShoppingListEndpoint findProductsByShoppingListEndpoint;
     private final CheckProductInListEndpoint checkProductInListEndpoint;
     private final UncheckProductInListEndpoint uncheckProductInListEndpoint;
+    private final SaveShoppingListEndpoint saveShoppingListEndpoint;
+    private final CloneShoppingListEndpoint cloneShoppingListEndpoint;
 
     @Override
     public ResponseEntity<List<ProductCategoryResponse>> categoriesFindCategories(String name) {
@@ -90,5 +91,15 @@ public class V1ApiController implements V1Api{
     @Override
     public ResponseEntity<Void> shoppingProductsUncheck(String shoppingListId, String productId) {
         return uncheckProductInListEndpoint.unCheck(shoppingListId, productId);
+    }
+
+    @Override
+    public ResponseEntity<ShoppingListResponse> shoppingListSave(ShoppingListRequest shoppingList) {
+        return saveShoppingListEndpoint.save(shoppingList);
+    }
+
+    @Override
+    public ResponseEntity<ShoppingListResponse> shoppingListClone(String shoppingListId) {
+        return cloneShoppingListEndpoint.clone(shoppingListId);
     }
 }
