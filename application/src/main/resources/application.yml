@@ -74,6 +74,10 @@ spring:
         - production
   jpa:
     show-sql: false
+    datasource:
+      url: jdbc:postgres://uigvgqvxrnzhky:c1210a73e956e75bafee21aee8a59b5446a259d0328f48cce52be1d6b316a42d@ec2-54-204-28-187.compute-1.amazonaws.com:5432/d5i6613aev8e96
+      username: uigvgqvxrnzhky
+      password: c1210a73e956e75bafee21aee8a59b5446a259d0328f48cce52be1d6b316a42d
 logging:
   level:
     root: error
