@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +24,15 @@ public class ShoppingListRepositoryImpl implements ShoppingListRepository {
 
     @Override
     public List<ShoppingList> findAll(LocalDateTime after, LocalDateTime before) {
-        return Collections.emptyList();
+        return shoppingListMapper.toDomain(
+            shoppingListJpaRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(after, before)
+        );
+    }
+
+    @Override
+    public ShoppingList save(ShoppingList shoppingList) {
+        return shoppingListMapper.toDomain(shoppingListJpaRepository.save(
+                shoppingListMapper.toEntity(shoppingList)
+        ));
     }
 }

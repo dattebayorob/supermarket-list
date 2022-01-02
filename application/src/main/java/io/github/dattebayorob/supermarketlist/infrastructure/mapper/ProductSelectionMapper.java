@@ -9,9 +9,14 @@ import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.projection.ProductSelectionProjection;
 import io.github.dattebayorob.supermarketlist.infrastructure.mapper.abstraction.DomainMapper;
 import io.github.dattebayorob.supermarketlist.infrastructure.mapper.abstraction.ResponseMapper;
+import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductSelectionRequest;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ProductSelectionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+import static java.lang.Boolean.TRUE;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +52,15 @@ public class ProductSelectionMapper implements
         domain.setProduct(projectionToProduct(projection));
         domain.setShoppingList(new ShoppingList(projection.getShoppingListId()));
         domain.setQuantity(projection.getQuantity());
-        domain.setChecked(Boolean.TRUE.equals(projection.getChecked()));
+        domain.setChecked(TRUE.equals(projection.getChecked()));
+        return domain;
+    }
+
+    public ProductSelection toDomain(ProductSelectionRequest request) {
+        var domain = new ProductSelection();
+        domain.setProduct(new Product(UUID.fromString(request.getId())));
+        domain.setQuantity(request.getQuantity());
+        domain.setChecked(TRUE.equals(request.isChecked()));
         return domain;
     }
 

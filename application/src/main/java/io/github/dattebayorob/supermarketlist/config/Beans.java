@@ -66,4 +66,16 @@ public class Beans {
     ) {
         return new CheckOrUncheckProductInListServiceImpl(validateShoppingListAndProduct, productSelectionRepository);
     }
+    @Bean
+    public SaveShoppingListService saveShoppingListService(
+            final ShoppingListRepository shoppingListRepository, ProductSelectionRepository productSelectionRepository
+    ) {
+        return new SaveShoppingListServiceImpl(shoppingListRepository, productSelectionRepository);
+    }
+    @Bean
+    public CloneShoppingListService cloneShoppingListService(
+            final ShoppingListRepository shoppingListRepository, final ProductSelectionRepository productSelectionRepository
+    ) {
+        return new CloneShoppingListServiceImpl(shoppingListRepository, productSelectionRepository);
+    }
 }

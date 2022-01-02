@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface ProductSelectionRepository {
     ProductSelection save(ProductSelection productSelection);
+    List<ProductSelection> saveAll(List<ProductSelection> productSelections);
     Optional<ProductSelection> findByShoppingListIdAndProductId(UUID shoppingListId, UUID productId);
     void removeByProductIdAndShoppingListId(UUID productId, UUID shoppingListId);
     void updateProductSelectionQuantity(UUID productId, UUID shoppingListId, int quantity);
