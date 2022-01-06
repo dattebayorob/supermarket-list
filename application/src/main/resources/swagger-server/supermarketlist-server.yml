@@ -222,7 +222,7 @@ paths:
           description: "Shopping List or product not found"
     delete:
       tags:
-        - "products"
+        - "shopping-list-products"
       summary: "Remove a product from given shopping list"
       operationId: "shopping#products#removeProductInList"
       parameters:
