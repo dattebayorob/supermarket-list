@@ -5,9 +5,13 @@ import io.github.dattebayorob.supermarketlist.exception.ErrorCode;
 import io.github.dattebayorob.supermarketlist.exception.ResourceNotFoundException;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ErrorRepresentation;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ErrorRepresentationErrors;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -42,6 +46,17 @@ public class RestControllerAdvice {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(JwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorRepresentation handleJwtExcepetion(JwtException jwtException) {
+        return toErrorRepresentation(jwtException);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorRepresentation handleAuthenticationException(AuthenticationException authenticationException) {
+        return toErrorRepresentation(authenticationException);
+    }
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorRepresentation> handleThrowable(Throwable exception) {
@@ -69,6 +84,10 @@ public class RestControllerAdvice {
             var message = constraintViolation.getMessage();
             return new ErrorRepresentationErrors().field(field).message(message);
         };
+    }
+
+    private ErrorRepresentation toErrorRepresentation(Exception ex) {
+        return new ErrorRepresentation().message(ex.getMessage());
     }
 
 }

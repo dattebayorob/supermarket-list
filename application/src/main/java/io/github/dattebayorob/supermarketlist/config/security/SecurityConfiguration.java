@@ -2,15 +2,19 @@ package io.github.dattebayorob.supermarketlist.config.security;
 
 import io.github.dattebayorob.supermarketlist.config.security.jwt.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +24,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -41,24 +45,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .exceptionHandling().authenticationEntryPoint(((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
-                .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                    .cors( cors -> {
-                        var corsConfiguration = new CorsConfiguration();
-                        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-                        var configurationSource = new UrlBasedCorsConfigurationSource();
-                        configurationSource.registerCorsConfiguration("/**", corsConfiguration);
-                        cors.configurationSource(configurationSource);
-                    })
+        http.cors().and()
+                .csrf(CsrfConfigurer::disable)
+                .authorizeRequests(
+                        authorizeRequest -> authorizeRequest
+                            .antMatchers(HttpMethod.GET, "/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**").permitAll()
+                            .anyRequest().authenticated()
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
+                        ((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                ))
+                .sessionManagement(
+                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .cors(corsConfiguration())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
+    }
+
+    @NotNull
+    private Customizer<CorsConfigurer<HttpSecurity>> corsConfiguration() {
+        return cors -> {
+            var configuration = new CorsConfiguration();
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedOriginPatterns(List.of("*"));
+            //configuration.setAllowedOrigins(List.of("*"));
+            configuration.setAllowedHeaders(List.of("*"));
+            configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTION"));
+            var corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+            corsConfigurationSource.registerCorsConfiguration("/**", configuration);
+            cors.configurationSource(corsConfigurationSource);
+        };
     }
 
     @Bean

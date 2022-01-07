@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static java.util.Optional.ofNullable;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
@@ -30,22 +31,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
 
-        getBearerToken(requestTokenHeader).flatMap(getUserDetails()).ifPresent( user -> {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                user, null, user.getAuthorities()
-            );
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        });
+        try{
+            getBearerToken(requestTokenHeader).flatMap(getUserDetails(request)).ifPresent( user -> {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    user, null, user.getAuthorities()
+                );
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            });
+        }catch (Exception e) {}
 
         filterChain.doFilter(request, response);
     }
 
-    private Function<String, Optional<UserDetails>> getUserDetails() {
+    private Function<String, Optional<UserDetails>> getUserDetails(HttpServletRequest request) {
         return token -> ofNullable(jwtTokenService.getUsernameFromToken(token))
-                .filter(_ignored -> getContext().getAuthentication() == null)
+                .filter(isLoginOrRefreshTokenPaths(request))
+                .filter(isAuthenticationContextNull())
                 .map(jwtUserDetailsService::loadUserByUsername)
                 .filter(userDetails -> jwtTokenService.validateToken(token, userDetails.getUsername()));
+    }
+
+    private Predicate<String> isLoginOrRefreshTokenPaths(HttpServletRequest request) {
+        return _ignored -> !request.getServletPath().equals("/v1/login") && !request.getServletPath().startsWith("/v1/token");
+    }
+
+    private Predicate<String> isAuthenticationContextNull() {
+        return _ignored -> getContext().getAuthentication() == null;
     }
 
     private Optional<String> getBearerToken(String requestTokenHeader) {
