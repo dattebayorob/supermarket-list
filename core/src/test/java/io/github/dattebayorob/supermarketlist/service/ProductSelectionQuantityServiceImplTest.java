@@ -1,6 +1,7 @@
 package io.github.dattebayorob.supermarketlist.service;
 
 import io.github.dattebayorob.supermarketlist.port.in.ProductSelectionRepository;
+import io.github.dattebayorob.supermarketlist.service.validation.ValidateShoppingListAndProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +16,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProductSelectionQuantityServiceImplTest {
     @Mock ProductSelectionRepository productSelectionRepository;
+    @Mock ValidateShoppingListAndProduct validateShoppingListAndProduct;
     ProductSelectionQuantityServiceImpl productSelectionQuantityService;
 
     @BeforeEach
     void beforeEach() {
-        productSelectionQuantityService = new ProductSelectionQuantityServiceImpl(productSelectionRepository);
+        productSelectionQuantityService = new ProductSelectionQuantityServiceImpl(productSelectionRepository, validateShoppingListAndProduct);
     }
 
     @Test

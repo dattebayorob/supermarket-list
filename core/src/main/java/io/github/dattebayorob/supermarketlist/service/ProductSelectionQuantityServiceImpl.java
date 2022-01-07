@@ -5,6 +5,7 @@ import io.github.dattebayorob.supermarketlist.port.out.DecreaseProductQuantityIn
 import io.github.dattebayorob.supermarketlist.port.out.GetProductQuantityInProductListService;
 import io.github.dattebayorob.supermarketlist.port.out.IncreaseProductQuantityInProductListService;
 import io.github.dattebayorob.supermarketlist.port.out.UpdateProductQuantityInProductListService;
+import io.github.dattebayorob.supermarketlist.service.validation.ValidateShoppingListAndProduct;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class ProductSelectionQuantityServiceImpl implements
                                                     DecreaseProductQuantityInProductListService,
                                                     GetProductQuantityInProductListService {
     private final ProductSelectionRepository productSelectionRepository;
+    private final ValidateShoppingListAndProduct validateShoppingListAndProduct;
 
     @Override
     public void decreaseProductQuantityInProductList(UUID productId, UUID shoppingListId) {
@@ -37,6 +39,7 @@ public class ProductSelectionQuantityServiceImpl implements
 
     @Override
     public void updateProductQuantityInProductListService(UUID productId, UUID shoppingListId, Integer quantity) {
+        validateShoppingListAndProduct.validate(shoppingListId, productId);
         productSelectionRepository.updateProductSelectionQuantity(productId, shoppingListId, Optional.ofNullable(quantity).orElse(1));
     }
 

@@ -1,6 +1,7 @@
 package io.github.dattebayorob.supermarketlist.infrastructure.database;
 
 import io.github.dattebayorob.supermarketlist.common.CollectionUtil;
+import io.github.dattebayorob.supermarketlist.config.security.SessionWrapper;
 import io.github.dattebayorob.supermarketlist.domain.ProductSelection;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductSelectionId;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductSelectionJpa;
@@ -21,15 +22,21 @@ public class ProductSelectionRepositoryImpl implements ProductSelectionRepositor
     private final ProductSelectionMapper productSelectionMapper;
     @Override
     public ProductSelection save(ProductSelection productSelection) {
-        return productSelectionMapper.toDomain(productSelectionJpaRepository.save(
-            productSelectionMapper.toEntity(productSelection)
-        ));
+        var entity = productSelectionMapper.toEntity(productSelection);
+        entity.setUserId(SessionWrapper.getSession().getId());
+
+        return productSelectionMapper.toDomain(productSelectionJpaRepository.save(entity));
     }
 
     @Override
     public List<ProductSelection> saveAll(List<ProductSelection> productSelections) {
+        var entities = productSelectionMapper.toEntity(productSelections);
+        entities = CollectionUtil.map(entities, entity -> {
+            entity.setUserId(SessionWrapper.getSession().getId());
+            return entity;
+        });
         return productSelectionMapper.toDomain(productSelectionJpaRepository.saveAll(
-            productSelectionMapper.toEntity(productSelections)
+            entities
         ));
     }
 
@@ -45,6 +52,9 @@ public class ProductSelectionRepositoryImpl implements ProductSelectionRepositor
     public void updateProductSelectionQuantity(UUID productId, UUID shoppingListId, int quantity) {
         var selection = productSelectionJpaRepository.findById(new ProductSelectionId(productId, shoppingListId))
                 .orElseGet(() -> new ProductSelectionJpa(productId, shoppingListId));
+        if ( selection.getUserId() == null ) {
+            selection.setUserId(SessionWrapper.getSession().getId());
+        }
         selection.setQuantity(quantity);
         productSelectionJpaRepository.save(selection);
     }
