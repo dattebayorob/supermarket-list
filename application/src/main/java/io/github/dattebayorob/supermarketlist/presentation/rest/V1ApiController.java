@@ -5,6 +5,9 @@ import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.catego
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.category.UpdateCategoryEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.FindProductEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.product.ProductsByProductCategoryIdEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.security.LoginEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.security.LogoutEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.security.RefreshTokenEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.CloneShoppingListEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.SaveShoppingListEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglistproduct.*;
@@ -18,6 +21,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class V1ApiController implements V1Api{
+    private final LoginEndpoint loginEndpoint;
+    private final LogoutEndpoint logoutEndpoint;
+    private final RefreshTokenEndpoint refreshTokenEndpoint;
     private final FindProductCategoriesEndpoint findProductCategoriesEndpoint;
     private final SaveProductCategoryEndpoint saveProductCategoryEndpoint;
     private final UpdateCategoryEndpoint productCategoryEndpoint;
@@ -32,6 +38,21 @@ public class V1ApiController implements V1Api{
     private final UncheckProductInListEndpoint uncheckProductInListEndpoint;
     private final SaveShoppingListEndpoint saveShoppingListEndpoint;
     private final CloneShoppingListEndpoint cloneShoppingListEndpoint;
+
+    @Override
+    public ResponseEntity<JwtResponse> login(JwtRequest jwtRequest) {
+        return loginEndpoint.login(jwtRequest);
+    }
+
+    @Override
+    public ResponseEntity<Void> logout(String authorization) {
+        return logoutEndpoint.logout(authorization);
+    }
+
+    @Override
+    public ResponseEntity<JwtResponse> refreshToken(String refreshToken) {
+        return refreshTokenEndpoint.refreshToken(refreshToken);
+    }
 
     @Override
     public ResponseEntity<List<ProductCategoryResponse>> categoriesFindCategories(String name) {

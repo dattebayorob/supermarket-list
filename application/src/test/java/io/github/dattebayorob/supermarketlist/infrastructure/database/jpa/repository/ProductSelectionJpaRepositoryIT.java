@@ -28,6 +28,7 @@ class ProductSelectionJpaRepositoryIT {
     @Autowired ProductCategoryJpaRepository productCategoryJpaRepository;
     @Autowired ShoppingListJpaRepository shoppingListJpaRepository;
     @Autowired ProductSelectionJpaRepository productSelectionJpaRepository;
+    @Autowired UserJpaRepository userJpaRepository;
 
     @Test
     void shouldFindByProductIdAndShoppingListId() {
@@ -39,9 +40,11 @@ class ProductSelectionJpaRepositoryIT {
         var shoppingList = getShoppingList();
         shoppingListJpaRepository.save(shoppingList);
         var id = new ProductSelectionId(product.getId(), shoppingList.getId());
+        var user = userJpaRepository.save(getUser());
         var selection = new ProductSelectionJpa();
         selection.setId(id);
         selection.setQuantity(3);
+        selection.setUserId(user.getId());
         productSelectionJpaRepository.save(selection);
         Assertions.assertThat(productSelectionJpaRepository.findById(id))
                 .isNotEmpty()
@@ -58,10 +61,12 @@ class ProductSelectionJpaRepositoryIT {
         productJpaRepository.save(product);
         var shoppingList = getShoppingList();
         shoppingListJpaRepository.save(shoppingList);
+        var user = userJpaRepository.save(getUser());
         var id = new ProductSelectionId(product.getId(), shoppingList.getId());
         var selection = new ProductSelectionJpa();
         selection.setId(id);
         selection.setQuantity(3);
+        selection.setUserId(user.getId());
         productSelectionJpaRepository.save(selection);
 
         assertTrue(productSelectionJpaRepository.existsById(id));
@@ -79,17 +84,18 @@ class ProductSelectionJpaRepositoryIT {
         var products2 = productJpaRepository.saveAll(getProducts(category, "Product 7", "Product 8", "Product 9", "Product 10"));
         var shoppingList = shoppingListJpaRepository.save(getShoppingList(getDate(Month.JANUARY)));
         var shoppingList2 = shoppingListJpaRepository.save(getShoppingList(getDate(Month.FEBRUARY)));
+        var user = userJpaRepository.save(getUser());
 
-        productSelectionJpaRepository.saveAll(mapSelections(products, shoppingList.getId()));
-        productSelectionJpaRepository.saveAll(mapSelections(products2, shoppingList2.getId()));
+        productSelectionJpaRepository.saveAll(mapSelections(products, shoppingList.getId(), user.getId()));
+        productSelectionJpaRepository.saveAll(mapSelections(products2, shoppingList2.getId(), user.getId()));
 
         assertThat(productSelectionJpaRepository.findByShoppingListId(shoppingList.getId())).hasSize(6);
         assertThat(productSelectionJpaRepository.findByShoppingListId(shoppingList2.getId())).hasSize(4);
 
     }
 
-    List<ProductSelectionJpa> mapSelections(List<ProductJpa> products, UUID shoppingListId) {
-        return products.stream().map(product -> new ProductSelectionJpa(product.getId(), shoppingListId, 1)).collect(Collectors.toList());
+    List<ProductSelectionJpa> mapSelections(List<ProductJpa> products, UUID shoppingListId, UUID userId) {
+        return products.stream().map(product -> new ProductSelectionJpa(product.getId(), shoppingListId, 1, userId)).collect(Collectors.toList());
     }
 
     List<ProductJpa> getProducts(ProductCategoryJpa category, String ... names) {
@@ -131,5 +137,13 @@ class ProductSelectionJpaRepositoryIT {
         shoppingList.setCreatedAt(LocalDateTime.now());
         shoppingList.setLocked(false);
         return shoppingList;
+    }
+
+    UserJpa getUser() {
+        var user = new UserJpa();
+        user.setName("Test");
+        user.setEmail("test");
+        user.setEnabled(true);
+        return user;
     }
 }

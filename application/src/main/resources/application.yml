@@ -20,6 +20,8 @@ springfox:
     swagger:
       v2:
         path: /api-docs
+jwt:
+  secret: qwe123
 ---
 spring:
   config:
@@ -81,3 +83,5 @@ spring:
 logging:
   level:
     root: error
+jwt:
+  secret: "!^fA;dH_st29``KL"

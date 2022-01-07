@@ -1,9 +1,6 @@
 package io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.repository;
 
-import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductCategoryJpa;
-import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductJpa;
-import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ProductSelectionJpa;
-import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ShoppingListJpa;
+import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +24,7 @@ class ProductJpaRepositoryIT {
     @Autowired ProductJpaRepository productJpaRepository;
     @Autowired ProductCategoryJpaRepository productCategoryJpaRepository;
     @Autowired ProductSelectionJpaRepository productSelectionJpaRepository;
+    @Autowired UserJpaRepository userJpaRepository;
 
     @Test
     void shouldFindProductsByShoppingListId() {
@@ -35,17 +33,17 @@ class ProductJpaRepositoryIT {
         var products2 = productJpaRepository.saveAll(getProducts(category, "Product 7", "Product 8", "Product 9", "Product 10"));
         var shoppingList = shoppingListJpaRepository.save(getShoppingList(getDate(Month.JANUARY)));
         var shoppingList2 = shoppingListJpaRepository.save(getShoppingList(getDate(Month.FEBRUARY)));
-
-        productSelectionJpaRepository.saveAll(mapSelections(products, shoppingList.getId()));
-        productSelectionJpaRepository.saveAll(mapSelections(products2, shoppingList2.getId()));
+        var user = userJpaRepository.save(getUser());
+        productSelectionJpaRepository.saveAll(mapSelections(products, shoppingList.getId(), user));
+        productSelectionJpaRepository.saveAll(mapSelections(products2, shoppingList2.getId(), user));
 
         assertThat(productJpaRepository.findByShoppingListId(shoppingList.getId())).hasSize(6);
         assertThat(productJpaRepository.findByShoppingListId(shoppingList2.getId())).hasSize(4);
 
     }
 
-    List<ProductSelectionJpa> mapSelections(List<ProductJpa> products, UUID shoppingListId) {
-        return products.stream().map(product -> new ProductSelectionJpa(product.getId(), shoppingListId, 1)).collect(Collectors.toList());
+    List<ProductSelectionJpa> mapSelections(List<ProductJpa> products, UUID shoppingListId, UserJpa user) {
+        return products.stream().map(product -> new ProductSelectionJpa(product.getId(), shoppingListId, 1, user.getId())).collect(Collectors.toList());
     }
 
     List<ProductJpa> getProducts(ProductCategoryJpa category, String ... names) {
@@ -74,5 +72,13 @@ class ProductJpaRepositoryIT {
         shoppingList.setCreatedAt(createdAt);
         shoppingList.setLocked(false);
         return shoppingList;
+    }
+
+    UserJpa getUser() {
+        var user = new UserJpa();
+        user.setName("Test");
+        user.setEmail("test");
+        user.setEnabled(true);
+        return user;
     }
 }

@@ -14,67 +14,74 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class Beans {
-    private final ProductRepository productRepository;
-    private final ProductSelectionRepository productSelectionRepository;
-    private final ShoppingListRepository shoppingListRepository;
-    private final ProductCategoryRepository productCategoryRepository;
 
     @Bean
-    public AddProductSelectionToProductListService addProductSelectionToProductListService() {
-        return new AddProductSelectionToProductListServiceImpl(productRepository, shoppingListRepository, productSelectionRepository);
-    }
-
-    @Bean
-    public FindShoppingListsService findProductListsService() {
+    public FindShoppingListsService findProductListsService(final ShoppingListRepository shoppingListRepository) {
         return new FindShoppingListsServiceImpl(shoppingListRepository);
     }
     @Bean
-    public FindProductsService findProductsService() {
+    public FindProductsService findProductsService(final ProductRepository productRepository) {
         return new FindProductsServiceImpl(productRepository);
     }
     @Bean
-    public ProductSelectionQuantityServiceImpl productSelectionQuantityService() {
-        return new ProductSelectionQuantityServiceImpl(productSelectionRepository);
+    public ProductSelectionQuantityServiceImpl productSelectionQuantityService(
+            final ValidateShoppingListAndProduct validateShoppingListAndProduct,
+            final ProductSelectionRepository productSelectionRepository
+    ) {
+        return new ProductSelectionQuantityServiceImpl(productSelectionRepository, validateShoppingListAndProduct);
     }
     @Bean
-    public FindProductCategoriesByNameLikeService findProductCategoriesByNameLikeService() {
+    public FindProductCategoriesByNameLikeService findProductCategoriesByNameLikeService(final ProductCategoryRepository productCategoryRepository) {
         return new FindProductCategoriesByNameLikeServiceImpl(productCategoryRepository);
     }
     @Bean
-    public SaveProductCategoryService saveProductCategoryService() {
+    public SaveProductCategoryService saveProductCategoryService(final ProductCategoryRepository productCategoryRepository) {
         return new SaveProductCategoryServiceImpl(productCategoryRepository);
     }
     @Bean
-    public UpdateProductCategoryService updateProductCategoryService() {
+    public UpdateProductCategoryService updateProductCategoryService(final ProductCategoryRepository productCategoryRepository) {
         return new UpdateProducCategoryServiceImpl(productCategoryRepository);
     }
     @Bean
-    public RemoveProductFromShoppingListService removeProductFromShoppingListService() {
+    public RemoveProductFromShoppingListService removeProductFromShoppingListService(
+            final ProductSelectionRepository productSelectionRepository,
+            final ShoppingListRepository shoppingListRepository,
+            final ProductRepository productRepository
+    ) {
         return new RemoveProductSelectionToShoppingListServiceImpl(productSelectionRepository, shoppingListRepository, productRepository);
     }
     @Bean
-    public FindProductsByShoppingListIdService findProductsByShoppingListIdService() {
+    public FindProductsByShoppingListIdService findProductsByShoppingListIdService(
+            final ShoppingListRepository shoppingListRepository,
+            final ProductSelectionRepository productSelectionRepository
+    ) {
         return new FindProductsByShoppingListIdServiceImpl(shoppingListRepository,productSelectionRepository);
     }
     @Bean
-    public ValidateShoppingListAndProduct validateShoppingListAndProduct() {
+    public ValidateShoppingListAndProduct validateShoppingListAndProduct(
+            final ShoppingListRepository shoppingListRepository,
+            final ProductRepository productRepository
+    ) {
         return new ValidateShoppingListAndProduct(shoppingListRepository, productRepository);
     }
     @Bean
     public CheckOrUncheckProductInListServiceImpl checkOrUncheckProductInListService(
-            final ValidateShoppingListAndProduct validateShoppingListAndProduct, final ProductSelectionRepository productSelectionRepository
+            final ValidateShoppingListAndProduct validateShoppingListAndProduct,
+            final ProductSelectionRepository productSelectionRepository
     ) {
         return new CheckOrUncheckProductInListServiceImpl(validateShoppingListAndProduct, productSelectionRepository);
     }
     @Bean
     public SaveShoppingListService saveShoppingListService(
-            final ShoppingListRepository shoppingListRepository, ProductSelectionRepository productSelectionRepository
+            final ShoppingListRepository shoppingListRepository,
+            final ProductSelectionRepository productSelectionRepository
     ) {
         return new SaveShoppingListServiceImpl(shoppingListRepository, productSelectionRepository);
     }
     @Bean
     public CloneShoppingListService cloneShoppingListService(
-            final ShoppingListRepository shoppingListRepository, final ProductSelectionRepository productSelectionRepository
+            final ShoppingListRepository shoppingListRepository,
+            final ProductSelectionRepository productSelectionRepository
     ) {
         return new CloneShoppingListServiceImpl(shoppingListRepository, productSelectionRepository);
     }
