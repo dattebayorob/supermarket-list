@@ -18,10 +18,64 @@ tags:
     description: "Shopping Lists"
   - name: "shopping-list-products"
     description: "Products of a shopping list"
+  - name: "security"
 schemes:
   - "https"
   - "http"
 paths:
+  /v1/login:
+    post:
+      tags:
+        - "security"
+      summary: "Login"
+      operationId: "login"
+      parameters:
+        - in: "body"
+          name: "jwtRequest"
+          required: true
+          schema:
+            $ref: '#/definitions/JwtRequest'
+      responses:
+        200:
+          description: "Login succefully"
+          schema:
+            $ref: '#/definitions/JwtResponse'
+        401:
+          description: "Username invalid"
+  /v1/logout:
+    delete:
+      tags:
+        - "security"
+      summary: "Logout"
+      operationId: "logout"
+      parameters:
+        - in: header
+          name: "Authorization"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Logout succefully"
+        401:
+          description: "No Authentication present"
+  /v1/token/refresh/{refreshToken}:
+    post:
+      tags:
+        - "security"
+      summary: "Refresh token"
+      operationId: "refreshToken"
+      parameters:
+        - in: path
+          name: refreshToken
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Token generated successfully"
+          schema:
+            $ref: '#/definitions/JwtResponse'
+        401:
+          description: "Refresh Token invalid or expired"
   /v1/categories:
     get:
       tags:
@@ -338,6 +392,25 @@ paths:
         404:
           description: "Shopping List or product not found"
 definitions:
+  JwtRequest:
+    required:
+      - username
+      - password
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  JwtResponse:
+    type: object
+    properties:
+      token:
+        type: string
+      expiration:
+        type: integer
+      refresh_token:
+        type: string
   ProductCategoryRequest:
     required:
       - name
