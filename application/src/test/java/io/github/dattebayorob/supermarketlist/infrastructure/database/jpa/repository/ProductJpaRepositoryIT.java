@@ -78,6 +78,7 @@ class ProductJpaRepositoryIT {
         var user = new UserJpa();
         user.setName("Test");
         user.setEmail("test");
+        user.setPassword("test");
         user.setEnabled(true);
         return user;
     }

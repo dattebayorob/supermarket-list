@@ -144,6 +144,7 @@ class ProductSelectionJpaRepositoryIT {
         user.setName("Test");
         user.setEmail("test");
         user.setEnabled(true);
+        user.setPassword("test");
         return user;
     }
 }
