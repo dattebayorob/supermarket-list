@@ -2,6 +2,7 @@ package io.github.dattebayorob.supermarketlist.infrastructure.database;
 
 import io.github.dattebayorob.supermarketlist.domain.ShoppingList;
 import io.github.dattebayorob.supermarketlist.domain.filter.ShoppingListFilters;
+import io.github.dattebayorob.supermarketlist.domain.util.Pagination;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.entity.ShoppingListJpa;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.repository.ShoppingListJpaRepository;
 import io.github.dattebayorob.supermarketlist.infrastructure.database.jpa.specification.FindShoppingListsByFiltersSpecification;
@@ -33,6 +34,9 @@ public class ShoppingListRepositoryImplTest {
     @Mock ShoppingListMapper shoppingListMapper;
     @Mock FindShoppingListsByFiltersSpecification specification;
     @Mock PaginationMapper paginationMapper;
+    @Mock ShoppingListFilters filters;
+    @Mock Specification<ShoppingListJpa> spec;
+    @Mock Pageable pageable;
     ShoppingListRepositoryImpl shoppingListRepository;
 
     @BeforeEach
@@ -51,11 +55,10 @@ public class ShoppingListRepositoryImplTest {
 
     @Test
     void shouldFindAllByPeriodOfDates() {
-        LocalDateTime after = LocalDateTime.now();
-        LocalDateTime before = LocalDateTime.now();
-        ShoppingListFilters filters = new ShoppingListFilters(after, before, null, null, null);
-        when(specification.findShoppingListsByFilters(filters)).thenReturn(mock(Specification.class));
-        when(shoppingListJpaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(Page.empty());
+        when(specification.findShoppingListsByFilters(filters)).thenReturn(spec);
+        when(paginationMapper.toPageable(any())).thenReturn(pageable);
+        when(shoppingListJpaRepository.findAll(spec, pageable)).thenReturn(Page.empty());
+        when(paginationMapper.toPagination(any())).thenReturn(Pagination.empty());
         assertNotNull(shoppingListRepository.findAll(filters));
         verify(shoppingListJpaRepository).findAll(any(Specification.class), any(Pageable.class));
     }
