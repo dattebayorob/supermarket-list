@@ -189,6 +189,34 @@ paths:
             items:
               $ref: "#/definitions/ProductResponse"
   /v1/lists:
+    get:
+      tags:
+        - "shopping-lists"
+      summary: "Lists"
+      operationId: "findAllShoppingListBetweenDates"
+      parameters:
+        - in: query
+          name: after
+          type: string
+          format: 'date-time'
+        - in: query
+          name: before
+          type: string
+          format: 'date-time'
+          required: false
+        - in: query
+          name: page
+          type: integer
+          required: false
+        - in: query
+          name: size
+          type: integer
+          required: false
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: '#/definitions/PaginationResponse'
     post:
       tags:
         - "shopping-lists"
@@ -411,6 +439,19 @@ definitions:
         type: integer
       refresh_token:
         type: string
+  PaginationResponse:
+    type: "object"
+    properties:
+      content:
+        type: array
+        items:
+          type: object
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
   ProductCategoryRequest:
     required:
       - name

@@ -8,7 +8,6 @@ import io.github.dattebayorob.supermarketlist.presentation.rest.representation.S
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneOffset;
-import java.util.UUID;
 
 @Component
 public class ShoppingListMapper implements
