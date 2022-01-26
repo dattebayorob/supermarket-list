@@ -9,6 +9,7 @@ import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.securi
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.security.LogoutEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.security.RefreshTokenEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.CloneShoppingListEndpoint;
+import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.FindShoppingLitsBetweenDatesEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglist.SaveShoppingListEndpoint;
 import io.github.dattebayorob.supermarketlist.presentation.rest.endpoints.shoppinglistproduct.*;
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.*;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @RestController
@@ -38,6 +40,7 @@ public class V1ApiController implements V1Api{
     private final UncheckProductInListEndpoint uncheckProductInListEndpoint;
     private final SaveShoppingListEndpoint saveShoppingListEndpoint;
     private final CloneShoppingListEndpoint cloneShoppingListEndpoint;
+    private final FindShoppingLitsBetweenDatesEndpoint findShoppingLitsBetweenDatesEndpoint;
 
     @Override
     public ResponseEntity<JwtResponse> login(JwtRequest jwtRequest) {
@@ -122,5 +125,10 @@ public class V1ApiController implements V1Api{
     @Override
     public ResponseEntity<ShoppingListResponse> shoppingListClone(String shoppingListId) {
         return cloneShoppingListEndpoint.clone(shoppingListId);
+    }
+
+    @Override
+    public ResponseEntity<PaginationResponse> findAllShoppingListBetweenDates(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size) {
+        return findShoppingLitsBetweenDatesEndpoint.findAll(after, before, page, size);
     }
 }

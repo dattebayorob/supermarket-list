@@ -1,5 +1,6 @@
 package io.github.dattebayorob.supermarketlist.config;
 
+import io.github.dattebayorob.supermarketlist.infrastructure.mapper.PaginationMapper;
 import io.github.dattebayorob.supermarketlist.port.in.ProductCategoryRepository;
 import io.github.dattebayorob.supermarketlist.port.in.ProductRepository;
 import io.github.dattebayorob.supermarketlist.port.in.ProductSelectionRepository;
@@ -84,5 +85,9 @@ public class Beans {
             final ProductSelectionRepository productSelectionRepository
     ) {
         return new CloneShoppingListServiceImpl(shoppingListRepository, productSelectionRepository);
+    }
+    @Bean
+    public PaginationMapper paginationMapper() {
+        return new PaginationMapper();
     }
 }
