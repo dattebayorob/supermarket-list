@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface ProductJpaRepository extends JpaRepository<ProductJpa, UUID>, JpaSpecificationExecutor<ProductJpa> {
     @Query(value = "select p.* from product p join product_selection ps on ps.product_id = p.id where ps.shoppinglist_id = :shoppingListId order by p.name", nativeQuery = true)
     List<ProductJpa> findByShoppingListId(@Param("shoppingListId") UUID shoppingListId);
+    @Query(value = "select case when exists (select 1 from product p join product_selection ps on ps.product_id = p.id where ps.shoppinglist_id = :shoppingListId) then true else false end", nativeQuery = true)
+    boolean existsByShoppingListId(UUID shoppingListId);
 }

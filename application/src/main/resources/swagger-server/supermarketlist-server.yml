@@ -212,6 +212,10 @@ paths:
           name: size
           type: integer
           required: false
+        - in: query
+          name: sort
+          type: array
+          required: false
       responses:
         200:
           description: ""

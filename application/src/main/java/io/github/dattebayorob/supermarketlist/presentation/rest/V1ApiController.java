@@ -128,7 +128,7 @@ public class V1ApiController implements V1Api{
     }
 
     @Override
-    public ResponseEntity<PaginationResponse> findAllShoppingListBetweenDates(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size) {
-        return findShoppingLitsBetweenDatesEndpoint.findAll(after, before, page, size);
+    public ResponseEntity<PaginationResponse> findAllShoppingListBetweenDates(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size, List<String> sort) {
+        return findShoppingLitsBetweenDatesEndpoint.findAll(after, before, page, size, sort);
     }
 }

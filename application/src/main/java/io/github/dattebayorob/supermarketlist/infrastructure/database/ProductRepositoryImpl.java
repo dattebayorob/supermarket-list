@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository{
     private final ProductJpaRepository productJpaRepository;
     private final ProductMapper productMapper;
     private final FindProductsByFiltersSpecification findProductsByFiltersSpecification;
     @Override
-    @Transactional(readOnly = true)
     public List<Product> findAll(ProductFilters filters) {
         Specification<ProductJpa> specification = findProductsByFiltersSpecification.findProductsByFilters(filters);
         return productMapper.toDomain(productJpaRepository.findAll(specification));
@@ -34,8 +34,12 @@ public class ProductRepositoryImpl implements ProductRepository{
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Product> findByShoppingListId(UUID shoppingListId) {
         return productMapper.toDomain(productJpaRepository.findByShoppingListId(shoppingListId));
+    }
+
+    @Override
+    public boolean existsByShoppingListId(UUID shoppingListId) {
+        return productJpaRepository.existsByShoppingListId(shoppingListId);
     }
 }

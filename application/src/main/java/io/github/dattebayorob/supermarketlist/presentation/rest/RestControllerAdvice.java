@@ -7,6 +7,7 @@ import io.github.dattebayorob.supermarketlist.presentation.rest.representation.E
 import io.github.dattebayorob.supermarketlist.presentation.rest.representation.ErrorRepresentationErrors;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -43,6 +44,14 @@ public class RestControllerAdvice {
         ErrorRepresentation error = new ErrorRepresentation()
                 .code(ErrorCode.REQUEST_PARAM_ERROR)
                 .errors(toErrorRepresentation(exception.getConstraintViolations()));
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorRepresentation> handlePropertyReferenceException(PropertyReferenceException exception) {
+        ErrorRepresentation error = new ErrorRepresentation()
+                .code(ErrorCode.REQUEST_PARAM_ERROR)
+                .errors(List.of(new ErrorRepresentationErrors().field("The parameter "+exception.getPropertyName()+" is invalid.")));
         return ResponseEntity.badRequest().body(error);
     }
 

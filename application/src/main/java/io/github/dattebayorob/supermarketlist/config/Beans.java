@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class Beans {
 
     @Bean
-    public FindShoppingListsService findProductListsService(final ShoppingListRepository shoppingListRepository) {
-        return new FindShoppingListsServiceImpl(shoppingListRepository);
+    public FindShoppingListsService findProductListsService(final ShoppingListRepository shoppingListRepository, final ProductRepository productRepository) {
+        return new FindShoppingListsServiceImpl(shoppingListRepository, productRepository);
     }
     @Bean
     public FindProductsService findProductsService(final ProductRepository productRepository) {

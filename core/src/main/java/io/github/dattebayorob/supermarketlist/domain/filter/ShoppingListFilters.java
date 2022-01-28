@@ -4,6 +4,8 @@ import io.github.dattebayorob.supermarketlist.domain.util.PageFilter;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Data
 public class ShoppingListFilters extends PageFilter {
@@ -14,12 +16,12 @@ public class ShoppingListFilters extends PageFilter {
         LocalDateTime before,
         Integer page,
         Integer size,
-        String sort
+        List<String> sort
     ) {
         this.after = after;
         this.before = before;
         setPage(page);
         setSize(size);
-        setSort(sort);
+        setSort(Optional.ofNullable(sort).orElseGet(() -> List.of("createdAt,desc")));
     }
 }

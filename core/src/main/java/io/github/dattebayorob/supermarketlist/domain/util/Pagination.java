@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ public class Pagination <T>{
                 this.size,
                 this.total
         );
+    }
+    public void forEach(Consumer<T> consumer) {
+        this.content.forEach(consumer);
     }
     public static final <U>Pagination<U> empty() {
         return new Pagination<U>(Collections.emptyList(), 0, 10, 0);

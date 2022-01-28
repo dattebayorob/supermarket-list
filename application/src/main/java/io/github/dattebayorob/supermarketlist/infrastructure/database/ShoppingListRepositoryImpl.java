@@ -9,7 +9,6 @@ import io.github.dattebayorob.supermarketlist.infrastructure.mapper.PaginationMa
 import io.github.dattebayorob.supermarketlist.infrastructure.mapper.ShoppingListMapper;
 import io.github.dattebayorob.supermarketlist.port.in.ShoppingListRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -29,10 +28,9 @@ public class ShoppingListRepositoryImpl implements ShoppingListRepository {
 
     @Override
     public Pagination<ShoppingList> findAll(ShoppingListFilters shoppingListFilters) {
-        Page<ShoppingList> page = shoppingListJpaRepository.findAll(
-                specification.findShoppingListsByFilters(shoppingListFilters),
-                paginationMapper.toPageable(shoppingListFilters)
-        ).map(shoppingListMapper::toDomain);
+        var spec = specification.findShoppingListsByFilters(shoppingListFilters);
+        var pageable = paginationMapper.toPageable(shoppingListFilters);
+        var page = shoppingListJpaRepository.findAll(spec,pageable).map(shoppingListMapper::toDomain);
         return paginationMapper.toPagination(page);
     }
 
