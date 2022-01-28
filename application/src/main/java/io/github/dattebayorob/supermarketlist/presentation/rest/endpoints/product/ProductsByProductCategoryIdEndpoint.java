@@ -13,6 +13,6 @@ public class ProductsByProductCategoryIdEndpoint {
     private final FindProductEndpoint productEndpoint;
 
     public ResponseEntity<List<ProductResponse>> findAllByCategoryId(String categoryId) {
-        return productEndpoint.findAll(null, categoryId);
+        return ResponseEntity.ok(productEndpoint.findAll(null, categoryId, null, 0, 0, null).getBody().getContent());
     }
 }

@@ -30,4 +30,10 @@ public class Pagination <T>{
     public static final <U>Pagination<U> empty() {
         return new Pagination<U>(Collections.emptyList(), 0, 10, 0);
     }
+    public static final <U>Pagination<U> of(List<U> content) {
+        return of(content, content.size());
+    }
+    public static final <U>Pagination<U> of(List<U> content, long total) {
+        return new Pagination<U>(content, 0, 10, total);
+    }
 }

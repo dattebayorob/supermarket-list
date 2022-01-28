@@ -181,13 +181,28 @@ paths:
           type: "string"
           pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
           maxLength: 36
+        - in: "query"
+          name: "shoppingListIdToIgnore"
+          type: "string"
+          pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          maxLength: 36
+        - in: query
+          name: page
+          type: integer
+          required: false
+        - in: query
+          name: size
+          type: integer
+          required: false
+        - in: query
+          name: sort
+          type: array
+          required: false
       responses:
         200:
-          description: "Collection of products"
+          description: ""
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/ProductResponse"
+            $ref: '#/definitions/PaginatedProductsResponse'
   /v1/lists:
     get:
       tags:
@@ -495,6 +510,19 @@ definitions:
         type: "string"
       category:
         $ref: '#/definitions/ProductCategoryResponse'
+  PaginatedProductsResponse:
+    type: "object"
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/ProductResponse'
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
   ProductSelectionRequest:
     type: "object"
     required:
