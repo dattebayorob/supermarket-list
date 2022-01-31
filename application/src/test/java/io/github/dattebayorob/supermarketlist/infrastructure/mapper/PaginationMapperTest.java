@@ -52,4 +52,15 @@ class PaginationMapperTest {
         Assertions.assertTrue(pageable.getSort().getOrderFor("createdAt").getDirection().isDescending());
     }
 
+    @Test
+    void shouldMapUnpagedButSortedPageable() {
+        PageFilter filter = new PageFilter() {};
+        filter.setPage(0);
+        filter.setSize(0);
+        filter.setSort(List.of("id desc", "name asc"));
+        Pageable pageable = paginationMapper.toPageable(filter);
+        Assertions.assertTrue(pageable.isUnpaged());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("id").getDirection().isDescending());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("name").getDirection().isAscending());    }
+
 }

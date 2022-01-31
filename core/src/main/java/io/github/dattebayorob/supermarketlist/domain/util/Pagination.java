@@ -1,6 +1,7 @@
 package io.github.dattebayorob.supermarketlist.domain.util;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Pagination <T>{
     private List<T> content;
@@ -34,6 +36,6 @@ public class Pagination <T>{
         return of(content, content.size());
     }
     public static final <U>Pagination<U> of(List<U> content, long total) {
-        return new Pagination<U>(content, 0, 10, total);
+        return new Pagination<>(content, 0, 10, total);
     }
 }

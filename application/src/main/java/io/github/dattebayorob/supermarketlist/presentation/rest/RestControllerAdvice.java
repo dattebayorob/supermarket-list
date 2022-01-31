@@ -51,7 +51,7 @@ public class RestControllerAdvice {
     public ResponseEntity<ErrorRepresentation> handlePropertyReferenceException(PropertyReferenceException exception) {
         ErrorRepresentation error = new ErrorRepresentation()
                 .code(ErrorCode.REQUEST_PARAM_ERROR)
-                .errors(List.of(new ErrorRepresentationErrors().field("The parameter "+exception.getPropertyName()+" is invalid.")));
+                .errors(List.of(new ErrorRepresentationErrors().field(exception.getPropertyName()).message("The parameter "+exception.getPropertyName()+" is invalid.")));
         return ResponseEntity.badRequest().body(error);
     }
 
