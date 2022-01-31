@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.data.util.ClassTypeInformation;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -73,6 +75,17 @@ class RestControllerAdviceTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.code", Matchers.equalTo(ErrorCode.INTERNAL_SERVER_ERROR)))
                 .andExpect(jsonPath("$.message", Matchers.equalTo(error)));
+    }
+
+    @Test
+    void shouldHandlePropertyReferenceException() throws Exception {
+        var propertyReferenceException = new PropertyReferenceException("name", ClassTypeInformation.from(Dummy.class), Collections.emptyList());
+        var dummy = new Dummy(UUID.randomUUID(), "Name");
+        doThrow(propertyReferenceException).when(dummyService).save(dummy);
+        mockMvcPerfom(dummy)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", Matchers.equalTo(ErrorCode.REQUEST_PARAM_ERROR)))
+                .andExpect(jsonPath("$.errors[0].field", Matchers.equalTo("name")));
     }
 
     private ResultActions mockMvcPerfom(Dummy dummy) throws Exception {

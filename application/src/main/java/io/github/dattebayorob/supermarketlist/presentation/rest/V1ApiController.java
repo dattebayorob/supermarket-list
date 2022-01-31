@@ -73,8 +73,8 @@ public class V1ApiController implements V1Api{
     }
 
     @Override
-    public ResponseEntity<List<ProductResponse>> productsFindAll(String name, String category) {
-        return productEndpoint.findAll(name, category);
+    public ResponseEntity<PaginatedProductsResponse> productsFindAll(String name, String category, String shoppingListIdToIgnore, Integer page, Integer size, List<String> sort) {
+        return productEndpoint.findAll(name, category, shoppingListIdToIgnore, page, size, sort);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class V1ApiController implements V1Api{
     }
 
     @Override
-    public ResponseEntity<PaginationResponse> findAllShoppingListBetweenDates(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size) {
-        return findShoppingLitsBetweenDatesEndpoint.findAll(after, before, page, size);
+    public ResponseEntity<PaginationResponse> findAllShoppingListBetweenDates(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size, List<String> sort) {
+        return findShoppingLitsBetweenDatesEndpoint.findAll(after, before, page, size, sort);
     }
 }

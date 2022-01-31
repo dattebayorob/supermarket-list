@@ -1,11 +1,15 @@
 package io.github.dattebayorob.supermarketlist.infrastructure.mapper;
 
+import io.github.dattebayorob.supermarketlist.domain.util.PageFilter;
 import io.github.dattebayorob.supermarketlist.domain.util.Pagination;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,5 +39,28 @@ class PaginationMapperTest {
         assertEquals(size, page.getSize());
         assertEquals(total, page.getTotalElements());
     }
+
+    @Test
+    void shouldMapSort() {
+        PageFilter filter = new PageFilter() {};
+        filter.setPage(0);
+        filter.setSize(10);
+        filter.setSort(List.of( "id desc", "name  asc", "createdAt desc" ));
+        Pageable pageable = paginationMapper.toPageable(filter);
+        Assertions.assertTrue(pageable.getSort().getOrderFor("id").getDirection().isDescending());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("name").getDirection().isAscending());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("createdAt").getDirection().isDescending());
+    }
+
+    @Test
+    void shouldMapUnpagedButSortedPageable() {
+        PageFilter filter = new PageFilter() {};
+        filter.setPage(0);
+        filter.setSize(0);
+        filter.setSort(List.of("id desc", "name asc"));
+        Pageable pageable = paginationMapper.toPageable(filter);
+        Assertions.assertTrue(pageable.isUnpaged());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("id").getDirection().isDescending());
+        Assertions.assertTrue(pageable.getSort().getOrderFor("name").getDirection().isAscending());    }
 
 }

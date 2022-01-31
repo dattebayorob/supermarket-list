@@ -2,6 +2,7 @@ package io.github.dattebayorob.supermarketlist.service;
 
 import io.github.dattebayorob.supermarketlist.domain.Product;
 import io.github.dattebayorob.supermarketlist.domain.filter.ProductFilters;
+import io.github.dattebayorob.supermarketlist.domain.util.Pagination;
 import io.github.dattebayorob.supermarketlist.port.in.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,8 @@ public class FindProductsServiceImplTest {
     @Test
     void shouldFindAll() {
         List<Product> products = new ArrayList<>();
-        Mockito.when(productRepository.findAll(filters)).thenReturn(products);
-        Assertions.assertEquals(products, findProductsService.findAll(filters));
+        Mockito.when(productRepository.findAll(filters)).thenReturn(Pagination.of(products));
+        Assertions.assertEquals(products, findProductsService.findAll(filters).getContent());
         Mockito.verify(productRepository).findAll(filters);
     }
 }

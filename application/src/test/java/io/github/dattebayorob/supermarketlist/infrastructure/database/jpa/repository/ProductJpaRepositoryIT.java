@@ -42,6 +42,19 @@ class ProductJpaRepositoryIT {
 
     }
 
+    @Test
+    void shouldReturnIfShoppingListIsEmpty() {
+        var category = productCategoryJpaRepository.save(getCategory());
+        var products = productJpaRepository.saveAll(getProducts(category, "Product 1", "Product 2", "Product 3", "Product 4", "Product 5", "Product 6"));
+        var shoppingList = shoppingListJpaRepository.save(getShoppingList(getDate(Month.JANUARY)));
+        var shoppingList2 = shoppingListJpaRepository.save(getShoppingList(getDate(Month.FEBRUARY)));
+        var user = userJpaRepository.save(getUser());
+        productSelectionJpaRepository.saveAll(mapSelections(products, shoppingList.getId(), user));
+
+        assertThat(productJpaRepository.existsByShoppingListId(shoppingList.getId())).isTrue();
+        assertThat(productJpaRepository.existsByShoppingListId(shoppingList2.getId())).isFalse();
+    }
+
     List<ProductSelectionJpa> mapSelections(List<ProductJpa> products, UUID shoppingListId, UserJpa user) {
         return products.stream().map(product -> new ProductSelectionJpa(product.getId(), shoppingListId, 1, user.getId())).collect(Collectors.toList());
     }

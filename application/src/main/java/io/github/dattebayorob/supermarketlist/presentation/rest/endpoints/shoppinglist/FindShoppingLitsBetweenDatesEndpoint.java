@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -20,8 +21,8 @@ public class FindShoppingLitsBetweenDatesEndpoint {
     private final ShoppingListMapper shoppingListMapper;
     private final PaginationMapper paginationMapper;
 
-    public ResponseEntity<PaginationResponse> findAll(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size) {
-        var filters = new ShoppingListFilters(toLocalDateTime(after), toLocalDateTime(before), page, size, null);
+    public ResponseEntity<PaginationResponse> findAll(OffsetDateTime after, OffsetDateTime before, Integer page, Integer size, List<String> sort) {
+        var filters = new ShoppingListFilters(toLocalDateTime(after), toLocalDateTime(before), page, size, sort);
         var pagination = findShoppingListsService.findAll(filters).map(shoppingListMapper::toResponse);
         return ResponseEntity.ok(paginationMapper.toResponse(pagination));
     }
