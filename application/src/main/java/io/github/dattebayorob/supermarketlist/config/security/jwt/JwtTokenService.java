@@ -5,10 +5,15 @@ import io.github.dattebayorob.supermarketlist.config.security.jwt.blacklist.JwtT
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +26,7 @@ public class JwtTokenService {
     private final String secret;
     private final JwtTokenBlackList jwtTokenBlackList;
     public JwtTokenService(@Value("${jwt.secret}")String secret, JwtTokenBlackList jwtTokenBlackList) {
-        this.secret = secret;
+        this.secret = hashSecret(secret);
         this.jwtTokenBlackList = jwtTokenBlackList;
     }
 
@@ -40,7 +45,9 @@ public class JwtTokenService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -62,11 +69,12 @@ public class JwtTokenService {
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject, int expiration) {
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         return Jwts.builder().setClaims(claims)
             .setSubject(subject)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-            .signWith(SignatureAlgorithm.HS512, secret)
+            .signWith(key)
         .compact();
     }
 
@@ -76,5 +84,16 @@ public class JwtTokenService {
 
     public void blackListToken(String token) {
         jwtTokenBlackList.blackList(token);
+    }
+
+    private String hashSecret(String secret) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedhash = digest.digest(
+                    secret.getBytes(StandardCharsets.UTF_8));
+            return new String(encodedhash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
